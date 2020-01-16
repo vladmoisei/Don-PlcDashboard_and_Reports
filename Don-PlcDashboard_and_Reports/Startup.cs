@@ -23,6 +23,8 @@ namespace Don_PlcDashboard_and_Reports
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddRazorPages(); // Added for Razor Pages
+            services.AddServerSideBlazor(); // Added for Blazor
             services.AddControllersWithViews();
         }
 
@@ -48,9 +50,11 @@ namespace Don_PlcDashboard_and_Reports
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapRazorPages();
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapBlazorHub(); // Added for blazor
             });
         }
     }

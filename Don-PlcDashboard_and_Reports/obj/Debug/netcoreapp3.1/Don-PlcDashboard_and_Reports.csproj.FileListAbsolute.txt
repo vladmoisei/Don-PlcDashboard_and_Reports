@@ -9,7 +9,6 @@ C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Repor
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\bin\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.pdb
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\bin\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.Views.dll
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\bin\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.Views.pdb
-C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.csprojAssemblyReference.cache
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\staticwebassets\Don-PlcDashboard_and_Reports.StaticWebAssets.Manifest.cache
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\staticwebassets\Don-PlcDashboard_and_Reports.StaticWebAssets.xml
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.MvcApplicationPartsAssemblyInfo.cache
@@ -33,3 +32,9 @@ C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Repor
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.dll
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.pdb
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.csproj.CopyComplete
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.RazorComponent.input.cache
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\ComponentProba.razor.g.cs
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\RazorDeclaration\Don-PlcDashboard_and_Reports.dll
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Components\ComponentProba.razor.g.cs
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\RazorDeclaration\_Imports.razor.g.cs
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\_Imports.razor.g.cs

@@ -1,0 +1,21 @@
+﻿<h3>ComponentProba</h3>
+
+Hello @Name
+
+<button @onclick="Toggle">Toggle button</button>
+
+@code {
+    public string Name { get; set; } = "Jon";
+
+    public void Toggle()
+    {
+        if (Name == "Jon")
+        {
+            Name = "Susan";
+        }
+        else
+        {
+            Name = "Jon";
+        }
+    }
+}
