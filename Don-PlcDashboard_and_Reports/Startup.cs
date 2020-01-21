@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Don_PlcDashboard_and_Reports.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +25,11 @@ namespace Don_PlcDashboard_and_Reports
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // @"Server=172.16.4.165\SQLEXPRESS;Database=ConsumGazDatabase;
+            services.AddDbContext<RaportareDbContext>(options =>
+            options.UseSqlServer(@"Server=172.16.4.165\SQLEXPRESS;Database=Don_DashboardReports;User Id=user; Password=Calarasi81; MultipleActiveResultSets=true;"));
+
+
             services.AddRazorPages(); // Added for Razor Pages
             services.AddServerSideBlazor(); // Added for Blazor
             services.AddControllersWithViews();
