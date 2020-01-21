@@ -10,6 +10,7 @@ namespace Don_PlcDashboard_and_Reports.Models
 {
     public class PlcModel
     {
+        [Display(Name = "Plc ID")]
         public int PlcModelID { get; set; }
         [Required]
         [StringLength(50, ErrorMessage = "The PlcName value cannot exceed 50 characters. ")]

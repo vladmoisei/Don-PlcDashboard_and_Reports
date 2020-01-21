@@ -9,6 +9,7 @@ namespace Don_PlcDashboard_and_Reports.Models
     public class TagModel
     {
         [Key]
+        [Display(Name = "Tag ID")]
         public int TagID { get; set; }
 
         [Required]
@@ -28,6 +29,8 @@ namespace Don_PlcDashboard_and_Reports.Models
 
         [Required]
         public int PlcModelID { get; set; }
+
+        [Display(Name = "Plc Name")]
         public virtual PlcModel PlcModel { get; set; }
     }
 }
