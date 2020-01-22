@@ -7,21 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
     public class PlcsController : Controller
     {
+        private readonly ILogger<PlcsController> _logger;
         private readonly RaportareDbContext _context;
 
-        public PlcsController(RaportareDbContext context)
+        public PlcsController(RaportareDbContext context, ILogger<PlcsController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         // GET: Plcs
         public async Task<IActionResult> Index()
         {
+            _logger.LogInformation("Proba log information din Plc controller");
             return View(await _context.Plcs.ToListAsync());
         }
 
