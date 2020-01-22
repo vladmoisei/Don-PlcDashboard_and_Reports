@@ -23,9 +23,9 @@ namespace Don_PlcDashboard_and_Reports.Models
         [Required]
         [StringLength(50, ErrorMessage = "The TagAdress value cannot exceed 50 characters. ")]
         public string Adress { get; set; }
+
         [Required]
-        [StringLength(50, ErrorMessage = "The TagDataType value cannot exceed 50 characters. ")]
-        public string DataType { get; set; }
+        public S7.Net.VarType DataType { get; set; }
 
         [Required]
         public int PlcModelID { get; set; }

@@ -17,8 +17,7 @@ namespace Don_PlcDashboard_and_Reports.Models
         public string Name { get; set; }
 
         [Required]
-        [StringLength(50, ErrorMessage = "The CpuType value cannot exceed 50 characters. ")]
-        public string CpuType { get; set; }
+        public S7.Net.CpuType CpuType { get; set; }
 
         [Required]
         [StringLength(15, ErrorMessage = "The PlcIp value cannot exceed 15 characters. ")]

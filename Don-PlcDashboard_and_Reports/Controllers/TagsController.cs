@@ -10,23 +10,23 @@ using Don_PlcDashboard_and_Reports.Models;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
-    public class TagModelsController : Controller
+    public class TagsController : Controller
     {
         private readonly RaportareDbContext _context;
 
-        public TagModelsController(RaportareDbContext context)
+        public TagsController(RaportareDbContext context)
         {
             _context = context;
         }
 
-        // GET: TagModels
+        // GET: Tags
         public async Task<IActionResult> Index()
         {
             var raportareDbContext = _context.Tags.Include(t => t.PlcModel);
             return View(await raportareDbContext.ToListAsync());
         }
 
-        // GET: TagModels/Details/5
+        // GET: Tags/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -45,14 +45,14 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(tagModel);
         }
 
-        // GET: TagModels/Create
+        // GET: Tags/Create
         public IActionResult Create()
         {
             ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name");
             return View();
         }
 
-        // POST: TagModels/Create
+        // POST: Tags/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -69,7 +69,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(tagModel);
         }
 
-        // GET: TagModels/Edit/5
+        // GET: Tags/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,7 +86,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(tagModel);
         }
 
-        // POST: TagModels/Edit/5
+        // POST: Tags/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -122,7 +122,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(tagModel);
         }
 
-        // GET: TagModels/Delete/5
+        // GET: Tags/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -141,7 +141,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(tagModel);
         }
 
-        // POST: TagModels/Delete/5
+        // POST: Tags/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

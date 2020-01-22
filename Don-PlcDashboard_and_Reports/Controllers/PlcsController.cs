@@ -10,22 +10,22 @@ using Don_PlcDashboard_and_Reports.Models;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
-    public class PlcModelsController : Controller
+    public class PlcsController : Controller
     {
         private readonly RaportareDbContext _context;
 
-        public PlcModelsController(RaportareDbContext context)
+        public PlcsController(RaportareDbContext context)
         {
             _context = context;
         }
 
-        // GET: PlcModels
+        // GET: Plcs
         public async Task<IActionResult> Index()
         {
             return View(await _context.Plcs.ToListAsync());
         }
 
-        // GET: PlcModels/Details/5
+        // GET: Plcs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -43,13 +43,13 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(plcModel);
         }
 
-        // GET: PlcModels/Create
+        // GET: Plcs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: PlcModels/Create
+        // POST: Plcs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -65,7 +65,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(plcModel);
         }
 
-        // GET: PlcModels/Edit/5
+        // GET: Plcs/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -81,7 +81,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(plcModel);
         }
 
-        // POST: PlcModels/Edit/5
+        // POST: Plcs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -116,7 +116,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(plcModel);
         }
 
-        // GET: PlcModels/Delete/5
+        // GET: Plcs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -134,7 +134,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(plcModel);
         }
 
-        // POST: PlcModels/Delete/5
+        // POST: Plcs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
