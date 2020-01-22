@@ -49,6 +49,7 @@
                 @Html.DisplayFor(modelItem => item.Slot)
             </td>
             <td>
+                <a asp-controller="Tags" asp-action="IndexFromPlc" asp-route-plcName="@item.Name" class="btn btn-outline-primary">Tags List</a> |
                 <a asp-action="Edit" asp-route-id="@item.PlcModelID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PlcModelID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.PlcModelID">Delete</a>

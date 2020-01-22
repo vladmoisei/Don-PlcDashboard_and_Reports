@@ -26,6 +26,15 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             return View(await raportareDbContext.ToListAsync());
         }
 
+        // GET: Tags from Plc Controller
+        public async Task<IActionResult> IndexFromPlc(string plcName)
+        {
+            var raportareDbContext = _context.Tags.Include(t => t.PlcModel).Where(item => item.PlcModel.Name == plcName);
+
+            //return View(await raportareDbContext.ToListAsync());
+            return View("Index", await raportareDbContext.ToListAsync() );
+        }
+
         // GET: Tags/Details/5
         public async Task<IActionResult> Details(int? id)
         {
