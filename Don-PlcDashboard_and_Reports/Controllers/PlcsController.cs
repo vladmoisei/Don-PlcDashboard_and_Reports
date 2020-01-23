@@ -25,7 +25,6 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         // GET: Plcs
         public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("Proba log information din Plc controller");
             return View(await _context.Plcs.ToListAsync());
         }
 

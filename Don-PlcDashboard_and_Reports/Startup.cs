@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Don_PlcDashboard_and_Reports.Data;
+using Don_PlcDashboard_and_Reports.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,7 @@ namespace Don_PlcDashboard_and_Reports
             services.AddRazorPages(); // Added for Razor Pages
             services.AddServerSideBlazor(); // Added for Blazor
             services.AddControllersWithViews();
+            services.AddSingleton<PlcService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -16,8 +16,6 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _logger.LogDebug("Proba login data");
-            _logger.LogInformation("Proba log information");
         }
 
         public IActionResult Index()

@@ -69,6 +69,20 @@ using Don_PlcDashboard_and_Reports;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 9 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using Don_PlcDashboard_and_Reports.Services;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 10 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using S7.Net;
+
+#line default
+#line hidden
+#nullable disable
     public partial class ComponentProba : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998
