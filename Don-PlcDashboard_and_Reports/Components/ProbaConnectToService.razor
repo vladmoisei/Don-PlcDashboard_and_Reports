@@ -2,6 +2,7 @@
 <h3>ProbaConnectToService</h3>
 
 Hello @Name
+Id: @Id
 
 <button @onclick="Toggle">Toggle button</button>
 <button @onclick="GetValue">Get Service Valoare</button>
@@ -9,6 +10,9 @@ Hello @Name
 Valoare: @Valoare
 
 @code {
+    [Parameter]
+    public int Id { get; set; }
+
     public string Name { get; set; } = "Jon";
     public int Valoare { get; set; }
 

@@ -175,3 +175,4 @@ C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Repor
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Views\Tags\Index.cshtml.g.cs
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\RazorDeclaration\Components\ProbaConnectToService.razor.g.cs
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Components\ProbaConnectToService.razor.g.cs
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Views\PlcService\Index.cshtml.g.cs

@@ -11,26 +11,27 @@ using System.Threading.Tasks;
 
 namespace Don_PlcDashboard_and_Reports.Services
 {
-    public class PlcService : IPlcService
+    public class PlcService
     {
         public int Valoare { get; set; } = 1;// Valoare de proba comunicatie Blazor
         // List of Plcs
         public List<PlcModel> ListPlcs;
-        // DbContext
-        private readonly RaportareDbContext _context;
+        // List of Tags
+        public List<TagModel> ListTags;
         // Logger
         private readonly ILogger<PlcService> _logger;
+
         // Constructor
-        public PlcService(ILogger<PlcService> logger, RaportareDbContext context)
+        public PlcService(ILogger<PlcService> logger)
         {
             ListPlcs = new List<PlcModel>();
-            _context = context;
+            ListTags = new List<TagModel>();
             _logger = logger;
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit PlcService din PlcService Constructor");
         }
 
         // Get New Plc object by PlcModel
-        public Plc GetNewPlc(PlcModel plcModel)
+        public Plc GetNewPlcFromPlcModel(PlcModel plcModel)
         {
             return new Plc(plcModel.CpuType, plcModel.Ip, plcModel.Rack, plcModel.Slot);
         }
@@ -80,7 +81,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     }
                     else return;
                 }, _cancelTasks.Token);
-                if (!task.Wait(TimeSpan.FromSeconds(0.5))) _cancelTasks.Cancel(); // Daca nu mai raspundein timp util se opreste Task
+                if (!task.Wait(TimeSpan.FromSeconds(0.5))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
             }
             catch (PlcException exPlc)
             {
@@ -96,17 +97,10 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
         }
 
-        // Get PlcModel by name from DbContext
-        public PlcModel GetPlcModelFromDbByName(string plcName)
+        // Initiate List of Plcs from DbContext
+        public async Task InitializeListOfPlcAsync(RaportareDbContext context)
         {
-            if (plcName == null)
-            {
-                return null;
-            }
-            var plcModel = _context.Plcs
-                .FirstOrDefault(m => m.Name == plcName);
-            _logger.LogInformation("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit PlcModel from Db with name", plcName);
-            return plcModel;
+            ListPlcs = await context.Plcs.ToListAsync();
         }
 
         // Check if a plc name is already in listPlcs
@@ -124,23 +118,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             _logger.LogInformation("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit PlcModel in ListPlcs with name", plcName);
             return true;
         }
-        // Add PlcModel to ListPlc by Plc name
-        public void AddPlcModelToListPlcs(string plcName)
-        {
-            if (plcName == null)
-            {
-                return;
-            }
-            // Check if Plc Name is already in ListPlcs
-            if (!IsPlcNameInListPlcs(plcName))
-            {
-                PlcModel plcModel = GetPlcModelFromDbByName(plcName);
-                plcModel.PlcObject = GetNewPlc(plcModel);
-                ListPlcs.Add(plcModel);
-                _logger.LogInformation("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit adaugat PlcModel in ListPlcs with name", plcName);
-            }
-
-        }
+        
         public string ClickTestare()
         {
             _logger.LogInformation("{data} {exMessege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Click din View component");

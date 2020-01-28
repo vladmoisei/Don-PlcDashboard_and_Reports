@@ -16,6 +16,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         private readonly ILogger<PlcsController> _logger;
         private readonly RaportareDbContext _context;
 
+        // Constructor
         public PlcsController(RaportareDbContext context, ILogger<PlcsController> logger)
         {
             _context = context;
