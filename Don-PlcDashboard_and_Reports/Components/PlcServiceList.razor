@@ -2,40 +2,39 @@
 @inject RaportareDbContext context
 <h3>PlcServiceList</h3>
 
+<h1>Index</h1>
 
-    <h1>Index</h1>
-
-    <p>
-        <button class="btn btn-primary" @onclick="CretePlcList">Create Plc List</button>
-        <button class="btn btn-danger" @onclick="(() => plcService.ListPlcs.Clear())">Clear Plc List</button>
-    </p>
-    <table class="table">
-        <thead>
-            <tr>
-                <th></th>
-                <th>
-                    Nume
-                </th>
-                <th>
-                    Ip
-                </th>
-                <th>
-                    IsConnected
-                </th>
-                <th>
-                    <button class="btn btn-primary" @onclick="ConnectAllPlcs">Connect All</button>
-                </th>
-                <th>
-                    <button class="btn btn-danger" @onclick="DisconnectAllPlcs">Disconnect All</button>
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var plc in plcServiceList)
-            {
+<p>
+    <button class="btn btn-primary" @onclick="CretePlcList">Create Plc List</button>
+    <button class="btn btn-danger" @onclick="(() => plcService.ListPlcs.Clear())">Clear Plc List</button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            <th>
+                Nume
+            </th>
+            <th>
+                Ip
+            </th>
+            <th>
+                IsConnected
+            </th>
+            <th>
+                <button class="btn btn-primary" @onclick="ConnectAllPlcs">Connect All</button>
+            </th>
+            <th>
+                <button class="btn btn-danger" @onclick="DisconnectAllPlcs">Disconnect All</button>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var plc in plcServiceList)
+        {
             <tr>
                 <td>
-                    <a>Tags List</a>
+                    <button class="btn btn-outline-primary" @onclick="(() => selectedPlc=plc)">TagsList</button>
                 </td>
                 <td>
                     @plc.Name
@@ -53,43 +52,79 @@
                     <button class="btn btn-outline-danger" @onclick="(() => plcService.DisconnectPlc(plc.PlcObject))">Disconnect Plc</button>
                 </td>
             </tr>
-            }
-        </tbody>
-    </table>
-
-
-
-
-
-
-
-    @code {
-        public List<PlcModel> plcServiceList;
-        // Initialize List of Plc from DbContext Plc
-        protected override void OnInitialized()
-        {
-            plcServiceList = plcService.ListPlcs;
         }
-        // Click event create plc list
-        private async Task CretePlcList()
-        {
-            await plcService.InitializeListOfPlcAsync(context);
-        }
+    </tbody>
+</table>
 
-        // Click event Connect all Plcs
-        private void ConnectAllPlcs()
+<h3>Tag List for @selectedPlc.Name</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Adress
+            </th>
+            <th>
+                DataType
+            </th>
+            <th>
+                Value
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tag in selectedPlc.TagsList)
         {
-            foreach (var plc in plcService.ListPlcs)
-            {
-                plcService.ConnectPlc(plc.PlcObject);
-            }
+            <tr>
+                <td>
+                    @tag.Name
+                </td>
+                <td>
+                    @tag.Adress
+                </td>
+                <td>
+                    @tag.DataType
+                </td>
+                <td>
+                    @tag.Value
+                </td>
+            </tr>
         }
-        // Click event Disconnect all Plcs
-        private void DisconnectAllPlcs()
+    </tbody>
+</table>
+@code {
+    // plcServiceList from PlcServicePlcList
+    public List<PlcModel> plcServiceList;
+    // Selcted Plc
+    public PlcModel selectedPlc;
+    // Initialize List of Plc from DbContext Plc
+    protected override void OnInitialized()
+    {
+        selectedPlc = new PlcModel { Name = "None" , TagsList = new List<TagModel>()};
+        plcServiceList = plcService.ListPlcs;
+    }
+    // Click event create plc list
+    private async Task CretePlcList()
+    {
+        await plcService.InitializeListOfPlcAsync(context);
+    }
+
+    // Click event Connect all Plcs
+    private void ConnectAllPlcs()
+    {
+        foreach (var plc in plcService.ListPlcs)
         {
-            foreach (var plc in plcService.ListPlcs)
-            {
-                plcService.DisconnectPlc(plc.PlcObject);
-            }
+            plcService.ConnectPlc(plc.PlcObject);
         }
     }
+    // Click event Disconnect all Plcs
+    private void DisconnectAllPlcs()
+    {
+        foreach (var plc in plcService.ListPlcs)
+        {
+            plcService.DisconnectPlc(plc.PlcObject);
+        }
+    }
+}

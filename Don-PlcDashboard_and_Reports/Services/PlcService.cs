@@ -103,9 +103,12 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             ListPlcs.Clear();
             IEnumerable<PlcModel> listPlcs = await context.Plcs.ToListAsync();
+            IEnumerable<TagModel> tagList = await context.Tags.ToListAsync();
+            // Add list of Plcs(with Plc object and TagList) from DbContext To PlcService PLCList
             foreach (var plcModel in listPlcs)
             {
                 plcModel.PlcObject = GetNewPlcFromPlcModel(plcModel);
+                plcModel.TagsList = tagList.Where(t => t.PlcModelID == plcModel.PlcModelID).ToList();
                 ListPlcs.Add(plcModel);
             }
         }
