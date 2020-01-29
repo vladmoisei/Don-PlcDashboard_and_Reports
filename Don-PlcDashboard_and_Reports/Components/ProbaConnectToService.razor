@@ -1,8 +1,12 @@
 ﻿@inject PlcService plcService
+@inject HttpClient http
 <h3>ProbaConnectToService</h3>
 
 Hello @Name
 Id: @Id
+
+<a class="btn btn-dark" href="/Plcs">Proba ancor link</a>
+<a asp-action="Delete" asp-route-id="2">Delete</a>
 
 <button @onclick="Toggle">Toggle button</button>
 <button @onclick="GetValue">Get Service Valoare</button>
@@ -15,6 +19,7 @@ Valoare: @Valoare
 
     public string Name { get; set; } = "Jon";
     public int Valoare { get; set; }
+
 
     public void Toggle()
     {

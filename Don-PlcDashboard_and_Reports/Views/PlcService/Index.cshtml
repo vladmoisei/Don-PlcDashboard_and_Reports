@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<Don_PlcDashboard_and_Reports.Models.PlcModel>
+@using Don_PlcDashboard_and_Reports.Components
 
 @{
     ViewData["Title"] = "Index";
 }
+
+<component Id="3" type="typeof(PlcServiceList)" render-mode="ServerPrerendered"/>
 
 <h1>Index</h1>
 
@@ -31,30 +34,31 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CpuType)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ip)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Rack)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Slot)
-            </td>
-            <td>
-                <a asp-controller="Tags" asp-action="IndexFromPlc" asp-route-plcName="@item.Name" class="btn btn-outline-primary">Tags List</a> |
-                <a asp-action="Edit" asp-route-id="@item.PlcModelID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PlcModelID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PlcModelID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CpuType)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ip)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Rack)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Slot)
+                </td>
+                <td>
+                    <a asp-controller="Tags" asp-action="IndexFromPlc" asp-route-plcName="@item.Name" class="btn btn-outline-primary">Tags List</a> |
+                    <a asp-action="Edit" asp-route-id="@item.PlcModelID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.PlcModelID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.PlcModelID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>

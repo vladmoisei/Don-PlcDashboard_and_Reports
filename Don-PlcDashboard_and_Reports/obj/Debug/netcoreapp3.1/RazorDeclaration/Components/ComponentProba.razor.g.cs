@@ -78,6 +78,20 @@ using Don_PlcDashboard_and_Reports.Services;
 #nullable disable
 #nullable restore
 #line 10 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using Don_PlcDashboard_and_Reports.Models;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 11 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using Don_PlcDashboard_and_Reports.Data;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 12 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
 using S7.Net;
 
 #line default

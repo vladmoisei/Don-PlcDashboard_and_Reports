@@ -78,6 +78,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     if (plc.IsConnected)
                     {
                         plc.Close(); // Inchidere conexiune Plc
+                        _logger.LogInformation("{data}<=>{Messege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a inchis conexiune cu plc", plc.IP);
                     }
                     else return;
                 }, _cancelTasks.Token);
@@ -100,7 +101,13 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Initiate List of Plcs from DbContext
         public async Task InitializeListOfPlcAsync(RaportareDbContext context)
         {
-            ListPlcs = await context.Plcs.ToListAsync();
+            ListPlcs.Clear();
+            IEnumerable<PlcModel> listPlcs = await context.Plcs.ToListAsync();
+            foreach (var plcModel in listPlcs)
+            {
+                plcModel.PlcObject = GetNewPlcFromPlcModel(plcModel);
+                ListPlcs.Add(plcModel);
+            }
         }
 
         // Check if a plc name is already in listPlcs
@@ -118,7 +125,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             _logger.LogInformation("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit PlcModel in ListPlcs with name", plcName);
             return true;
         }
-        
+
         public string ClickTestare()
         {
             _logger.LogInformation("{data} {exMessege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Click din View component");
