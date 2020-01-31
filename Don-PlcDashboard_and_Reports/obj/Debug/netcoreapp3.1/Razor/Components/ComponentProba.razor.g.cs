@@ -88,6 +88,13 @@ using Don_PlcDashboard_and_Reports.Data;
 #nullable disable
 #nullable restore
 #line 12 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using Microsoft.Extensions.Hosting;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
+#line 13 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
 using S7.Net;
 
 #line default

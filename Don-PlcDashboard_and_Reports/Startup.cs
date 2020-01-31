@@ -37,7 +37,10 @@ namespace Don_PlcDashboard_and_Reports
             services.AddServerSideBlazor(); // Added for Blazor
             services.AddControllersWithViews();
             services.AddScoped<HttpClient>();
-            services.AddSingleton<PlcService>();
+            services.AddSingleton<PlcService>(); // Added Plc service, startd directly because it is not derived
+            services.AddSingleton<IHostedService, BackgroundWorkService>(); // Added with Ihostedservice
+            // because, being derived from BackgroundService otherwise it is not started by itself
+            //services.AddHostedService<BackgroundService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

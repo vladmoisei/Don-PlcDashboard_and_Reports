@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Don_PlcDashboard_and_Reports.Models;
+using Don_PlcDashboard_and_Reports.Services;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
@@ -13,9 +16,13 @@ namespace Don_PlcDashboard_and_Reports.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        BackgroundWorkService _backgroundService;
+        public HomeController(ILogger<HomeController> logger, IHostedService backGroundService)
         {
             _logger = logger;
+            _backgroundService = backGroundService as BackgroundWorkService;            
+            _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-A CREAT HOMECONTROLLER AR TREBUI SA URMEZE SI BACKGROUND SERVICE");
+            _logger.LogInformation("{LasttimeScan} {text}", _backgroundService.LastTimeRunBackgroundWork.ToString("dd.MM.yyyy hh:mm:ss"), "Timp din backgroundService in HomeController");
         }
 
         public IActionResult Index()

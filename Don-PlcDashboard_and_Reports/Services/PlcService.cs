@@ -113,6 +113,44 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
         }
 
+        // Read Tag value
+        public void GetTagValueFromPlc(TagModel tag)
+        {
+            switch (tag.DataType)
+            {
+                case VarType.Bit:
+                    tag.Value = Convert.ToBoolean(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                    break;
+                case VarType.Byte:
+                    break;
+                case VarType.Word:
+                    break;
+                case VarType.DWord:
+                    break;
+                case VarType.Int:
+                    tag.Value = Convert.ToInt16(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                    break;
+                case VarType.DInt:
+                    tag.Value = Convert.ToInt32(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                    break;
+                case VarType.Real:
+                    tag.Value = Convert.ToDouble(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                    break;
+                case VarType.String:
+                    break;
+                case VarType.StringEx:
+                    break;
+                case VarType.Timer:
+                    break;
+                case VarType.Counter:
+                    break;
+                case VarType.DateTime:
+                    break;
+                default:
+                    break;
+            }            
+        } 
+
         // Check if a plc name is already in listPlcs
         public bool IsPlcNameInListPlcs(string plcName)
         {

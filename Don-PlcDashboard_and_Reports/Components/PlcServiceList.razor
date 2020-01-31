@@ -94,6 +94,7 @@
         }
     </tbody>
 </table>
+
 @code {
     // plcServiceList from PlcServicePlcList
     public List<PlcModel> plcServiceList;
@@ -102,7 +103,7 @@
     // Initialize List of Plc from DbContext Plc
     protected override void OnInitialized()
     {
-        selectedPlc = new PlcModel { Name = "None" , TagsList = new List<TagModel>()};
+        selectedPlc = new PlcModel { Name = "None", TagsList = new List<TagModel>() };
         plcServiceList = plcService.ListPlcs;
     }
     // Click event create plc list
