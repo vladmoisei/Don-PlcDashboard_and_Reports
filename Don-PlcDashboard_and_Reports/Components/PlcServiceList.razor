@@ -105,6 +105,7 @@
     {
         selectedPlc = new PlcModel { Name = "None", TagsList = new List<TagModel>() };
         plcServiceList = plcService.ListPlcs;
+        RefreshUi();
     }
     // Click event create plc list
     private async Task CretePlcList()
@@ -127,5 +128,20 @@
         {
             plcService.DisconnectPlc(plc.PlcObject);
         }
+    }
+
+    // For refrehing UI
+    // Refresh Ui
+    void RefreshUi()
+    {
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            Console.WriteLine("Din timer");
+
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }), null, 1000, 1000);
     }
 }

@@ -100,6 +100,13 @@ using S7.Net;
 #line default
 #line hidden
 #nullable disable
+#nullable restore
+#line 14 "C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\_Imports.razor"
+using System.Threading;
+
+#line default
+#line hidden
+#nullable disable
     public partial class ProbaConnectToService : Microsoft.AspNetCore.Components.ComponentBase
     {
         #pragma warning disable 1998

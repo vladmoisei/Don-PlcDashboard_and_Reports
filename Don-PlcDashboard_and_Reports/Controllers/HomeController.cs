@@ -17,10 +17,10 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         private readonly ILogger<HomeController> _logger;
 
         BackgroundWorkService _backgroundService;
-        public HomeController(ILogger<HomeController> logger, IHostedService backGroundService)
+        public HomeController(ILogger<HomeController> logger, BackgroundWorkService backGroundService, StartAutBackgroundService bk)
         {
             _logger = logger;
-            _backgroundService = backGroundService as BackgroundWorkService;            
+            _backgroundService = backGroundService;            
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-A CREAT HOMECONTROLLER AR TREBUI SA URMEZE SI BACKGROUND SERVICE");
             _logger.LogInformation("{LasttimeScan} {text}", _backgroundService.LastTimeRunBackgroundWork.ToString("dd.MM.yyyy hh:mm:ss"), "Timp din backgroundService in HomeController");
         }

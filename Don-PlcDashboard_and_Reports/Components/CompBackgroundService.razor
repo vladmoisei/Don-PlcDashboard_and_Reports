@@ -1,24 +1,52 @@
-﻿@inject IHostedService backgroundWork
+﻿@inject BackgroundWorkService backgroundWork
 <h3>BackgroundService</h3>
 
 <section id="backgroundService">
     <div class="row">
-        <h2>Background Service</h2>
     </div>
-    <div class="row">
+    @*<div class="row">  *@
         <h4 id="ceas">Ceas: @backgroundWorkService.LastTimeRunBackgroundWork.ToString("hh:mm:ss")</h4>
-        <h4>Service is Started: <span id="textIsBackgroundServiceStarted">ServiceIsStarted</span></h4>
-    </div>
+        <h4> Service is Started: @backgroundWork.IsRunnungBackgroundService</h4>
+        <h4> Refresh Time Interval: <input type="number" @bind="@backgroundWork.ReadingTimeInterval" /></h4>
+    @*</div>*@
     <div class="row">
-        @*<button class="btn btn-primary" @onclick="StartService">Create Plc List</button>*@
-        <div id="btnStartBackgroundService" class="col-md-6 btn btn-default">Start Backgorund Service</div>
-        <div id="btnStopBackgroundService" class="col-md-6 btn btn-default">Stop Backgorund Service</div>
+        <button class="col-md-6 btn @(backgroundWork.IsRunnungBackgroundService?"btn-success":"btn-outline-success")" @onclick="StartBackgroundService">Start Backgorund Service</button>
+        <button class="col-md-6 btn @(!backgroundWork.IsRunnungBackgroundService?"btn-danger":"btn-outline-danger")" @onclick="StopBackgroundService">Stop Backgorund Service</button>
     </div>
 </section>
+
 @code {
     BackgroundWorkService backgroundWorkService;
     protected override void OnInitialized()
     {
         backgroundWorkService = backgroundWork as BackgroundWorkService;
+        RefreshUi();
     }
+
+    // Click Event Start service
+    public void StartBackgroundService()
+    {
+        backgroundWork.StartAsync(new System.Threading.CancellationToken(false));
+    }
+
+    // Click Event Start service
+    public void StopBackgroundService()
+    {
+        backgroundWork.StopAsync(new System.Threading.CancellationToken());
+    }
+
+    // Refresh Ui
+    void RefreshUi()
+    {
+        var timer = new Timer(new TimerCallback(_ =>
+        {
+            Console.WriteLine("Din timer");
+
+            InvokeAsync(() =>
+            {
+                StateHasChanged();
+            });
+        }), null, 1000, 1000);
+    }
+
 }

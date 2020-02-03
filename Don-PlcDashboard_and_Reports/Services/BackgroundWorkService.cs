@@ -1,4 +1,5 @@
 ﻿using Don_PlcDashboard_and_Reports.Data;
+using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -15,9 +16,12 @@ namespace Don_PlcDashboard_and_Reports.Services
         private readonly ILogger<BackgroundWorkService> _logger;
         RaportareDbContext _context;
         PlcService _plcService;
+        CancellationTokenSource sourceToken;
+        CancellationToken ct;
 
         public BackgroundWorkService(ILogger<BackgroundWorkService> logger, PlcService plcService, IServiceProvider services)
         {
+            ReadingTimeInterval = 1000; //ms
             _plcService = plcService; // Get PlcService
             _logger = logger; // Get Logger
             Services = services; // Get Service Provider
@@ -30,43 +34,55 @@ namespace Don_PlcDashboard_and_Reports.Services
         public IServiceProvider Services { get; }
         public bool IsRunnungBackgroundService;
         public DateTime LastTimeRunBackgroundWork;
-        public Task StartAsync(CancellationToken stoppingToken)
+        public int ReadingTimeInterval { get; set; } // Timp refresh in ms
+        public override Task StartAsync(CancellationToken stoppingToken)
         {
+            sourceToken = new CancellationTokenSource();
+            ct = sourceToken.Token;
             // log
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Start command for background service din Start Async BackgroundWorkService");
 
+            Console.WriteLine($": Din Start async -  Cancelition token stare: {stoppingToken.IsCancellationRequested.ToString()}");
             //IsRunnungBackgroundService = true;
-            return Task.CompletedTask;
+            return base.StartAsync(ct);
         }
-        protected async override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             //log
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Start din Execute Async BackgroundWorkService");
+            Console.WriteLine($": Din Execute async -  Cancelition token stare: {stoppingToken.IsCancellationRequested.ToString()}");
 
+            await DoWork(ct);
+            //throw new NotImplementedException();
+        }
+
+        private async Task DoWork(CancellationToken stoppingToken)
+        {
             while (!stoppingToken.IsCancellationRequested)
             {
                 IsRunnungBackgroundService = true;
                 LastTimeRunBackgroundWork = DateTime.Now;
                 // log
-                _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Doing din while, din Execute Async BackgroundWorkService");
+                _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Doing din while, din DoWork Async BackgroundWorkService");
                 _logger.LogInformation("{LasttimeScan}", LastTimeRunBackgroundWork.ToString("dd.MM.yyyy hh:mm:ss"));
-                await Task.Delay(5000, stoppingToken);
-            }
-            //throw new NotImplementedException();
-        }
 
-        public async Task StopAsync(CancellationToken stoppingToken)
+                await Task.Delay(ReadingTimeInterval, stoppingToken);
+            }
+            sourceToken.Dispose();
+        }
+        public override Task StopAsync(CancellationToken stoppingToken)
         {
             // log
-            _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Stop command for background servicedin Stop Async BackgroundWorkService");
-
+            _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Stop command for background service din Stop Async BackgroundWorkService");
+            Console.WriteLine($": Din Stop async -  Cancelition token stare: {stoppingToken.IsCancellationRequested.ToString()}");
             IsRunnungBackgroundService = false;
-            await Task.CompletedTask;
+            sourceToken.Cancel();
+            return base.StopAsync(ct);
         }
-
-        public void Dispose()
+        public override void Dispose()
         {
-            
+            _logger.LogInformation($"Background Service disposed at: {DateTime.Now.ToShortTimeString()}");
+            base.Dispose();
         }
     }
 }
