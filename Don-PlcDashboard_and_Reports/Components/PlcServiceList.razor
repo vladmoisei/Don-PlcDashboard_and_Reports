@@ -44,10 +44,10 @@
                     @plc.PlcObject.IsConnected
                 </td>
                 <td>
-                    <button class="btn btn-outline-primary" @onclick="(() => plcService.ConnectPlc(plc.PlcObject))">Connect Plc</button>
+                    <button class="btn @(plc.PlcObject.IsConnected?"btn-success":"btn-outline-success")" @onclick="(() => plcService.ConnectPlc(plc.PlcObject))">Connect Plc</button>
                 </td>
                 <td>
-                    <button class="btn btn-outline-danger" @onclick="(() => plcService.DisconnectPlc(plc.PlcObject))">Disconnect Plc</button>
+                    <button class="btn @(!plc.PlcObject.IsConnected?"btn-danger":"btn-outline-danger")" @onclick="(() => plcService.DisconnectPlc(plc.PlcObject))">Disconnect Plc</button>
                 </td>
             </tr>
         }

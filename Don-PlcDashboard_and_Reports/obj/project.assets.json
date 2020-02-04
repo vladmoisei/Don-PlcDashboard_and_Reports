@@ -8553,11 +8553,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
+      "projectUniqueName": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
       "projectName": "Don-PlcDashboard_and_Reports",
-      "projectPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
+      "projectPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
       "packagesPath": "C:\\Users\\IA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\obj\\",
+      "outputPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet\\",
