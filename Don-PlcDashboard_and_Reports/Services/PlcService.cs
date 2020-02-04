@@ -6,6 +6,7 @@ using S7.Net;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -51,11 +52,11 @@ namespace Don_PlcDashboard_and_Reports.Services
                     }
                     else return;
                 }, _cancelTasks.Token);
-                if (!task.Wait(TimeSpan.FromSeconds(0.5))) _cancelTasks.Cancel(); // Daca nu mai raspundein timp util se opreste Task
+                if (!task.Wait(TimeSpan.FromSeconds(0.5))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
             }
             catch (PlcException exPlc)
             {
-                _logger.LogError("{data} {exMessege} IP: {ip}",DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
+                _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
             }
             catch (OperationCanceledException ex)
             {
@@ -148,8 +149,66 @@ namespace Don_PlcDashboard_and_Reports.Services
                     break;
                 default:
                     break;
-            }            
-        } 
+            }
+        }
+
+        // Update Tag List Values of Plc
+        public void RefreshTagValues(PlcModel plc)
+        {
+            foreach (TagModel tag in plc.TagsList)
+            {
+                try
+                {
+                    var _cancelTasks = new CancellationTokenSource();
+                    var task = Task.Run(() =>
+                    {
+                        if (plc.PlcObject.IsConnected)
+                        {
+                            //_lastScanTime = DateTime.Now;
+                            GetTagValueFromPlc(tag); // Citire semnale Plc
+                            //ScanTime = DateTime.Now - _lastScanTime; // Determinare ScanTime Plc
+                        }
+                        else
+                        {
+                            if (IsAvailableIpAdress(plc)) plc.PlcObject.Open(); // remake connection after it was lost
+                        };
+                    }, _cancelTasks.Token);
+                    if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                }
+                catch (PlcException exPlc)
+                {
+                    _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Name);
+                }
+                catch (OperationCanceledException ex)
+                {
+                    _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                }
+            }
+        }
+
+        // Functie Verificare Adresa IP
+        public bool IsAvailableIpAdress(PlcModel plc)
+        {
+            Ping ping = new Ping();
+            PingReply reply = ping.Send(plc.Ip, 200);
+            if (reply.Status.ToString() == "Success")
+                return true;
+            return false;
+        }
+
+        // Update Database Context Tag Values
+        public async Task UpdateDbContextTagsValue(RaportareDbContext context, List<TagModel> tags)
+        {
+            foreach (TagModel tag in tags)
+            {
+                context.Update(tag);
+            }
+            await context.SaveChangesAsync();
+        }
 
         // Check if a plc name is already in listPlcs
         public bool IsPlcNameInListPlcs(string plcName)

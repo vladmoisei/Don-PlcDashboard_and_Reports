@@ -1,4 +1,5 @@
 ﻿using Don_PlcDashboard_and_Reports.Data;
+using Don_PlcDashboard_and_Reports.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -62,6 +63,11 @@ namespace Don_PlcDashboard_and_Reports.Services
             {
                 IsRunnungBackgroundService = true;
                 LastTimeRunBackgroundWork = DateTime.Now;
+                foreach (PlcModel plc in _plcService.ListPlcs)
+                {
+                    _plcService.RefreshTagValues(plc);
+                    await _plcService.UpdateDbContextTagsValue(_context, plc.TagsList);
+                }
                 // log
                 _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Doing din while, din DoWork Async BackgroundWorkService");
                 _logger.LogInformation("{LasttimeScan}", LastTimeRunBackgroundWork.ToString("dd.MM.yyyy hh:mm:ss"));
