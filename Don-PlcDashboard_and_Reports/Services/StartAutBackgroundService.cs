@@ -8,9 +8,9 @@ namespace Don_PlcDashboard_and_Reports.Services
 {
     public class StartAutBackgroundService
     {
-        private BackgroundWorkService _backgroundService;
+        private TimedService _backgroundService;
         
-        public StartAutBackgroundService(BackgroundWorkService backgroundService)
+        public StartAutBackgroundService(TimedService backgroundService)
         {
             _backgroundService = backgroundService;
             _backgroundService.StartAsync(new CancellationToken());

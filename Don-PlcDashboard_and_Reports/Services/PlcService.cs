@@ -47,7 +47,15 @@ namespace Don_PlcDashboard_and_Reports.Services
                 {
                     if (!plc.IsConnected)
                     {
-                        plc.Open(); // Deschidere conexiune Plc
+                        try
+                        {
+                            plc.Open(); // Deschidere conexiune Plc
+                        }
+                        catch (PlcException exPlc)
+                        {
+
+                            _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
+                        }
                         _logger.LogInformation("{data}<=>{Messege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a deschis conexiune cu plc", plc.IP);
                     }
                     else return;

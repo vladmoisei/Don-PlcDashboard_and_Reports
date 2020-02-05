@@ -1,4 +1,4 @@
-﻿@inject BackgroundWorkService backgroundWork
+﻿@inject TimedService backgroundWork
 <h2>BackgroundService</h2>
 
 <section id="backgroundService">
@@ -16,10 +16,10 @@
 </section>
 
 @code {
-    BackgroundWorkService backgroundWorkService;
+    TimedService backgroundWorkService;
     protected override void OnInitialized()
     {
-        backgroundWorkService = backgroundWork as BackgroundWorkService;
+        backgroundWorkService = backgroundWork as TimedService;
         RefreshUi();
     }
 
@@ -40,7 +40,7 @@
     {
         var timer = new Timer(new TimerCallback(_ =>
         {
-            Console.WriteLine("Din timer");
+            //Console.WriteLine("Din timer");
 
             InvokeAsync(() =>
             {

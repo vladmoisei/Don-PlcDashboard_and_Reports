@@ -16,8 +16,8 @@ namespace Don_PlcDashboard_and_Reports.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        BackgroundWorkService _backgroundService;
-        public HomeController(ILogger<HomeController> logger, BackgroundWorkService backGroundService, StartAutBackgroundService bk)
+        TimedService _backgroundService;
+        public HomeController(ILogger<HomeController> logger, TimedService backGroundService, StartAutBackgroundService bk)
         {
             _logger = logger;
             _backgroundService = backGroundService;            
