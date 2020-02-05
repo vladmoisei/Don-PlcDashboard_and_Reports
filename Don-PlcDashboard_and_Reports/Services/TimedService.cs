@@ -71,16 +71,20 @@ namespace Don_PlcDashboard_and_Reports.Services
                 // Foreach Plc Refresh tag values and write them to DbContext
                 foreach (PlcModel plc in _plcService.ListPlcs)
                 {
-                    var _cancelTasks = new CancellationTokenSource();
-                    var task = Task.Run(async () =>
+                    // Return if plc is not enable
+                    if (plc.IsEnable)
                     {
-                        if (_plcService.IsConnectedPlc(plc))
+                        var _cancelTasks = new CancellationTokenSource();
+                        var task = Task.Run(async () =>
                         {
-                            _plcService.RefreshTagValues(plc); // Refresh value from Plc
+                            if (_plcService.IsConnectedPlc(plc))
+                            {
+                                _plcService.RefreshTagValues(plc); // Refresh value from Plc
                             await _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
                         }
-                    }, _cancelTasks.Token);
-                    if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                        }, _cancelTasks.Token);
+                        if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                    }
                 }
             }
             catch (InvalidOperationException exCollection)

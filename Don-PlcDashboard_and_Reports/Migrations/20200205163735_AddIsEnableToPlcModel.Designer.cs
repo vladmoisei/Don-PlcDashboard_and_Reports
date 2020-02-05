@@ -3,14 +3,16 @@ using Don_PlcDashboard_and_Reports.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Don_PlcDashboard_and_Reports.Migrations
 {
     [DbContext(typeof(RaportareDbContext))]
-    partial class RaportareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200205163735_AddIsEnableToPlcModel")]
+    partial class AddIsEnableToPlcModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

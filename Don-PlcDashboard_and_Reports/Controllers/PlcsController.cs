@@ -58,7 +58,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlcModelID,Name,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
+        public async Task<IActionResult> Create([Bind("PlcModelID,Name,IsEnable,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
         {
             if (ModelState.IsValid)
             {
@@ -90,7 +90,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlcModelID,Name,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
+        public async Task<IActionResult> Edit(int id, [Bind("PlcModelID,Name,IsEnable,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
         {
             if (id != plcModel.PlcModelID)
             {

@@ -17,6 +17,9 @@
                 @Html.DisplayNameFor(model => model.Name)
             </th>
             <th>
+                @Html.DisplayNameFor(model => model.IsEnable)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.CpuType)
             </th>
             <th>
@@ -41,6 +44,9 @@
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.IsEnable)
+            </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.CpuType)
             </td>
             <td>
@@ -52,7 +58,8 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Slot)
             </td>
-            <td>|
+            <td>
+                |
                 <a asp-action="Edit" asp-route-id="@item.PlcModelID">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.PlcModelID">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.PlcModelID">Delete</a>

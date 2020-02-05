@@ -11,6 +11,9 @@
         <tr>
             <th></th>
             <th>
+                IsEnable
+            </th>
+            <th>
                 Nume
             </th>
             <th>
@@ -30,26 +33,29 @@
     <tbody>
         @foreach (var plc in plcServiceList)
         {
-            <tr>
-                <td>
-                    <button class="btn btn-outline-primary" @onclick="(() => selectedPlc=plc)">TagsList</button>
-                </td>
-                <td>
-                    @plc.Name
-                </td>
-                <td>
-                    @plc.Ip
-                </td>
-                <td>
-                    @plc.PlcObject.IsConnected
-                </td>
-                <td>
-                    <button class="btn @(plc.PlcObject.IsConnected?"btn-success":"btn-outline-success")" @onclick="(() => plcService.ConnectPlc(plc.PlcObject))">Connect Plc</button>
-                </td>
-                <td>
-                    <button class="btn @(!plc.PlcObject.IsConnected?"btn-danger":"btn-outline-danger")" @onclick="(() => plcService.DisconnectPlc(plc.PlcObject))">Disconnect Plc</button>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                <button class="btn btn-outline-primary" @onclick="(() => selectedPlc=plc)">TagsList</button>
+            </td>
+            <td>
+                <input class="form-control" type="checkbox" data-val-required="The IsEnable field is required." id="IsEnable" name="IsEnable" @bind="@plc.IsEnable">
+            </td>
+            <td>
+                @plc.Name
+            </td>
+            <td>
+                @plc.Ip
+            </td>
+            <td>
+                @plc.PlcObject.IsConnected
+            </td>
+            <td>
+                <button class="btn @(plc.PlcObject.IsConnected?"btn-success":"btn-outline-success")" @onclick="(() => plcService.ConnectPlc(plc.PlcObject))">Connect Plc</button>
+            </td>
+            <td>
+                <button class="btn @(!plc.PlcObject.IsConnected?"btn-danger":"btn-outline-danger")" @onclick="(() => plcService.DisconnectPlc(plc.PlcObject))">Disconnect Plc</button>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

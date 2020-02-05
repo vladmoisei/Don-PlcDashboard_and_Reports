@@ -17,6 +17,9 @@ namespace Don_PlcDashboard_and_Reports.Models
         public string Name { get; set; }
 
         [Required]
+        public bool IsEnable { get; set; }
+
+        [Required]
         public S7.Net.CpuType CpuType { get; set; }
 
         [Required]
