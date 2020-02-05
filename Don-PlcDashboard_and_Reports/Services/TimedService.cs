@@ -71,14 +71,16 @@ namespace Don_PlcDashboard_and_Reports.Services
                 // Foreach Plc Refresh tag values and write them to DbContext
                 foreach (PlcModel plc in _plcService.ListPlcs)
                 {
-                    _plcService.RefreshTagValues(plc); // Refresh value from Plc
-
                     var _cancelTasks = new CancellationTokenSource();
                     var task = Task.Run(async () =>
                     {
-                        await _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
+                        if (_plcService.IsConnectedPlc(plc))
+                        {
+                            _plcService.RefreshTagValues(plc); // Refresh value from Plc
+                            await _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
+                        }
                     }, _cancelTasks.Token);
-                    if (!task.Wait(TimeSpan.FromSeconds(0.9))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                    if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
                 }
             }
             catch (InvalidOperationException exCollection)
@@ -99,8 +101,14 @@ namespace Don_PlcDashboard_and_Reports.Services
 
             // log
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Doing din while, din DoWork Async TimedService");
-
-            _timer.Start();
+            try
+            {
+                _timer.Start();
+            }
+            catch (ObjectDisposedException ex)
+            {
+                _logger.LogInformation("{data}<=>{Messege}<=>{error}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Log error ObjectDisposedException din DoWork din TimedService Timer disposed: ", ex.Message);
+            }
         }
 
         public void Dispose()

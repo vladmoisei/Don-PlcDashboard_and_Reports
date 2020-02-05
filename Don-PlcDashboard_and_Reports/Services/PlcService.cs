@@ -160,9 +160,40 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
         }
 
+        // Try to reconnect Plc in automatic mode if it is available
+        // return true if it is connected
+        public bool IsConnectedPlc(PlcModel plc)
+        {
+            // Try to reconnect plc if it is available
+            try
+            {
+                if (IsAvailableIpAdress(plc))
+                {
+                    // Check if it is connected
+                    if (!plc.PlcObject.IsConnected) plc.PlcObject.Open(); // if it is not connected => reconnect
+                    if (plc.PlcObject.IsConnected) return true; // if is connected return true
+                    return false;
+                }
+                else return false;
+            }
+            catch (PlcException exPlc)
+            {
+
+                _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Ip);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Ip);
+                return false;
+            }
+        }
+
+
         // Update Tag List Values of Plc
         public void RefreshTagValues(PlcModel plc)
         {
+            // Read Tag values from Plc
             foreach (TagModel tag in plc.TagsList)
             {
                 try
@@ -178,10 +209,11 @@ namespace Don_PlcDashboard_and_Reports.Services
                         }
                         else
                         {
-                            if (IsAvailableIpAdress(plc)) plc.PlcObject.Open(); // remake connection after it was lost
+                            return;
+                            //if (IsAvailableIpAdress(plc)) plc.PlcObject.Open(); // remake connection after it was lost
                         };
                     }, _cancelTasks.Token);
-                    if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                    if (!task.Wait(TimeSpan.FromSeconds(0.1))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
                 }
                 catch (PlcException exPlc)
                 {
@@ -202,10 +234,23 @@ namespace Don_PlcDashboard_and_Reports.Services
         public bool IsAvailableIpAdress(PlcModel plc)
         {
             Ping ping = new Ping();
-            PingReply reply = ping.Send(plc.Ip, 200);
-            if (reply.Status.ToString() == "Success")
-                return true;
-            return false;
+            try
+            {
+                PingReply reply = ping.Send(plc.Ip, 200);
+                if (reply.Status.ToString() == "Success")
+                    return true;
+                return false;
+            }
+            catch(System.Net.NetworkInformation.PingException exPing)
+            {
+                _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPing.Message, plc.Name);
+                return false;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                return false;
+            }
         }
 
         // Update Database Context Tag Values
