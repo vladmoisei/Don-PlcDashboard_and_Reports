@@ -116,8 +116,9 @@ namespace Don_PlcDashboard_and_Reports.Services
             // Add list of Plcs(with Plc object and TagList) from DbContext To PlcService PLCList
             foreach (var plcModel in listPlcs)
             {
-                plcModel.PlcObject = GetNewPlcFromPlcModel(plcModel);
+                plcModel.PlcObject = GetNewPlcFromPlcModel(plcModel); // Create Plc object
                 plcModel.TagsList = tagList.Where(t => t.PlcModelID == plcModel.PlcModelID).ToList();
+                plcModel.PingRequestsFail = 0; // Initiate with 0 ping requests fail
                 ListPlcs.Add(plcModel);
             }
         }
@@ -125,45 +126,71 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Read Tag value
         public void GetTagValueFromPlc(TagModel tag)
         {
-            switch (tag.DataType)
+            try
             {
-                case VarType.Bit:
-                    tag.Value = Convert.ToBoolean(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
-                    break;
-                case VarType.Byte:
-                    break;
-                case VarType.Word:
-                    break;
-                case VarType.DWord:
-                    break;
-                case VarType.Int:
-                    tag.Value = Convert.ToInt16(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
-                    break;
-                case VarType.DInt:
-                    tag.Value = Convert.ToInt32(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
-                    break;
-                case VarType.Real:
-                    tag.Value = Convert.ToDouble(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
-                    break;
-                case VarType.String:
-                    break;
-                case VarType.StringEx:
-                    break;
-                case VarType.Timer:
-                    break;
-                case VarType.Counter:
-                    break;
-                case VarType.DateTime:
-                    break;
-                default:
-                    break;
+                switch (tag.DataType)
+                {
+                    case VarType.Bit:
+                        tag.Value = Convert.ToBoolean(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                        break;
+                    case VarType.Byte:
+                        break;
+                    case VarType.Word:
+                        break;
+                    case VarType.DWord:
+                        break;
+                    case VarType.Int:
+                        tag.Value = Convert.ToInt16(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                        break;
+                    case VarType.DInt:
+                        tag.Value = Convert.ToInt32(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                        break;
+                    case VarType.Real:
+                        tag.Value = Convert.ToDouble(tag.PlcModel.PlcObject.Read(tag.Adress)).ToString();
+                        break;
+                    case VarType.String:
+                        break;
+                    case VarType.StringEx:
+                        break;
+                    case VarType.Timer:
+                        break;
+                    case VarType.Counter:
+                        break;
+                    case VarType.DateTime:
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (PlcException plcEx)
+            {
+                _logger.LogInformation("{data}<=>{Messege} {error}. PlcName: {PlcName}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Error reading tag value from plc: ", plcEx.Message, tag.PlcModel.Name);
+            }
+        }
+
+        // Check pingRequests grater than a nr and disable Plc
+        public void IsPingRequestsFailGrateThan(PlcModel plc, int nr)
+        {
+            if (plc.PingRequestsFail >= nr) plc.IsEnable = false;
+        }
+
+        // Reset pingRequests Fail at a certain time
+        public void RemakeEnablePlc(PlcModel plc)
+        {
+            if (DateTime.Now.Second == 10)
+            {
+                plc.PingRequestsFail = 0;
+                plc.IsEnable = true;
             }
         }
 
         // Try to reconnect Plc in automatic mode if it is available
+        // Disable Plc if PingRequestsFail => nr
         // return true if it is connected
         public bool IsConnectedPlc(PlcModel plc)
         {
+            // If Plc RequestsFail is grater than a nr, disable plc
+            IsPingRequestsFailGrateThan(plc, 5);
             // Try to reconnect plc if it is available
             try
             {
@@ -210,10 +237,9 @@ namespace Don_PlcDashboard_and_Reports.Services
                         else
                         {
                             return;
-                            //if (IsAvailableIpAdress(plc)) plc.PlcObject.Open(); // remake connection after it was lost
                         };
                     }, _cancelTasks.Token);
-                    if (!task.Wait(TimeSpan.FromSeconds(0.1))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                    if (!task.Wait(TimeSpan.FromSeconds(0.2))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
                 }
                 catch (PlcException exPlc)
                 {
@@ -238,29 +264,35 @@ namespace Don_PlcDashboard_and_Reports.Services
             {
                 PingReply reply = ping.Send(plc.Ip, 200);
                 if (reply.Status.ToString() == "Success")
+                {
+                    plc.PingRequestsFail = 0;
                     return true;
+                }
+                plc.PingRequestsFail++;
                 return false;
             }
             catch(System.Net.NetworkInformation.PingException exPing)
             {
                 _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPing.Message, plc.Name);
+                plc.PingRequestsFail++;
                 return false;
             }
             catch (Exception ex)
             {
                 _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                plc.PingRequestsFail++;
                 return false;
             }
         }
 
         // Update Database Context Tag Values
-        public async Task UpdateDbContextTagsValue(RaportareDbContext context, List<TagModel> tags)
+        public Task UpdateDbContextTagsValue(RaportareDbContext context, List<TagModel> tags)
         {
             foreach (TagModel tag in tags)
             {
                 context.Update(tag);
             }
-            await context.SaveChangesAsync();
+            return Task.CompletedTask;
         }
 
         // Check if a plc name is already in listPlcs

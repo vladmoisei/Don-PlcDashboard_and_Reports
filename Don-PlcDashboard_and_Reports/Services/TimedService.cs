@@ -71,28 +71,37 @@ namespace Don_PlcDashboard_and_Reports.Services
                 // Foreach Plc Refresh tag values and write them to DbContext
                 foreach (PlcModel plc in _plcService.ListPlcs)
                 {
+                    // Remake enable plc at every minute
+                    _plcService.RemakeEnablePlc(plc);
                     // Return if plc is not enable
                     if (plc.IsEnable)
                     {
                         var _cancelTasks = new CancellationTokenSource();
-                        var task = Task.Run(async () =>
+                        var task = Task.Run(() =>
                         {
-                            if (_plcService.IsConnectedPlc(plc))
+                            if (_plcService.IsConnectedPlc(plc)) // IsConnected also try to reconnect plc if it is available, and disable plc if it has pingrequestsfail grater than a nr
                             {
                                 _plcService.RefreshTagValues(plc); // Refresh value from Plc
-                            await _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
-                        }
+                                _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
+                            }
                         }, _cancelTasks.Token);
-                        if (!task.Wait(TimeSpan.FromSeconds(0.3))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
+                        if (!task.Wait(TimeSpan.FromSeconds(0.25))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
                     }
                 }
+                // Write Async to DbContext
+                var _cancelTasks2 = new CancellationTokenSource();
+                var task2 = Task.Run(async () =>
+                {
+                    await _context.SaveChangesAsync();
+                }, _cancelTasks2.Token);
+                if (!task2.Wait(TimeSpan.FromSeconds(0.2))) _cancelTasks2.Cancel(); // Daca nu mai raspunde in timp util se opreste Task
             }
             catch (InvalidOperationException exCollection)
             {
                 // log
                 _logger.LogInformation("{data}<=>{Messege}<=>{error}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Log error InvalidOperation din DoWork din TimedService: ", exCollection.Message);
             }
-            catch(AggregateException exAgreg)
+            catch (AggregateException exAgreg)
             {
                 // log
                 _logger.LogInformation("{data}<=>{Messege}<=>{error}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Log error Agregate din DoWork din TimedService: ", exAgreg.Message);

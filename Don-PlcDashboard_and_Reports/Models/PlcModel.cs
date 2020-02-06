@@ -34,6 +34,9 @@ namespace Don_PlcDashboard_and_Reports.Models
 
         [NotMapped]
         public virtual Plc PlcObject { get; set; }
+
+        [NotMapped]
+        public virtual int PingRequestsFail { get; set; }
         public virtual List<TagModel> TagsList { get; set; }
     }
 }
