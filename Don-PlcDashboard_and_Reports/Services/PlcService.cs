@@ -290,7 +290,15 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             foreach (TagModel tag in tags)
             {
-                context.Update(tag);
+                try
+                {
+                    context.Update(tag); // update tag value in DbContext
+                }
+                catch (InvalidOperationException exEFUpdate)
+                {
+
+                    _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exEFUpdate.Message, tag.PlcModel.Name);
+                }
             }
             return Task.CompletedTask;
         }

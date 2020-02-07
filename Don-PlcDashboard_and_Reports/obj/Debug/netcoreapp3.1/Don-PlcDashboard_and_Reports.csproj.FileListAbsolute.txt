@@ -362,3 +362,4 @@ C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Repor
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.csproj.CopyComplete
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.dll
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.pdb
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.csprojAssemblyReference.cache
