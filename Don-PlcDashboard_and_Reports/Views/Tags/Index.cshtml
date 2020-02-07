@@ -65,7 +65,13 @@
     @*Resetare automata continut pagina pentru a nu intra in standby*@
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#tagTable').DataTable();
+            $('#tagTable').DataTable({
+                dom: 'B<"clear">lfrtip',
+                buttons: {
+                    name: 'primary',
+                    buttons: ['copy', 'csv', 'excel']
+                }
+            });
         });
     </script>
 }
