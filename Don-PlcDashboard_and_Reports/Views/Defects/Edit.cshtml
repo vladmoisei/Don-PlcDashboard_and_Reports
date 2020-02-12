@@ -1,0 +1,59 @@
+﻿@model Don_PlcDashboard_and_Reports.Models.Defect
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Defect</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DefectID" />
+            <div class="form-group">
+                <label asp-for="PlcModel.Name" class="control-label"></label>
+                <select asp-for="PlcModel.Name" class="form-control" asp-items="ViewBag.PlcModelID"></select>
+                <span asp-validation-for="PlcModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimpStartDefect" class="control-label"></label>
+                <input asp-for="TimpStartDefect" class="form-control" />
+                <span asp-validation-for="TimpStartDefect" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimpStopDefect" class="control-label"></label>
+                <input asp-for="TimpStopDefect" class="form-control" />
+                <span asp-validation-for="TimpStopDefect" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="IntervalStationare" class="control-label"></label>
+                <input asp-for="IntervalStationare" class="form-control" />
+                <span asp-validation-for="IntervalStationare" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MotivStationare" class="control-label"></label>
+                <input asp-for="MotivStationare" class="form-control" />
+                <span asp-validation-for="MotivStationare" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="DefectFinalizat" /> @Html.DisplayNameFor(model => model.DefectFinalizat)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

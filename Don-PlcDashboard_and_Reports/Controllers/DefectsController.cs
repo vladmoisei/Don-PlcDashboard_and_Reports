@@ -7,29 +7,26 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
-using Microsoft.Extensions.Logging;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
-    public class PlcsController : Controller
+    public class DefectsController : Controller
     {
-        private readonly ILogger<PlcsController> _logger;
         private readonly RaportareDbContext _context;
 
-        // Constructor
-        public PlcsController(RaportareDbContext context, ILogger<PlcsController> logger)
+        public DefectsController(RaportareDbContext context)
         {
             _context = context;
-            _logger = logger;
         }
 
-        // GET: Plcs
+        // GET: Defects
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Plcs.ToListAsync());
+            var raportareDbContext = _context.Defects.Include(d => d.PlcModel);
+            return View(await raportareDbContext.ToListAsync());
         }
 
-        // GET: Plcs/Details/5
+        // GET: Defects/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -37,39 +34,42 @@ namespace Don_PlcDashboard_and_Reports.Controllers
                 return NotFound();
             }
 
-            var plcModel = await _context.Plcs
-                .FirstOrDefaultAsync(m => m.PlcModelID == id);
-            if (plcModel == null)
+            var defect = await _context.Defects
+                .Include(d => d.PlcModel)
+                .FirstOrDefaultAsync(m => m.DefectID == id);
+            if (defect == null)
             {
                 return NotFound();
             }
 
-            return View(plcModel);
+            return View(defect);
         }
 
-        // GET: Plcs/Create 
+        // GET: Defects/Create
         public IActionResult Create()
         {
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name");
             return View();
         }
 
-        // POST: Plcs/Create
+        // POST: Defects/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlcModelID,Name,IsEnable,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
+        public async Task<IActionResult> Create([Bind("DefectID,PlcModelID,TimpStartDefect,TimpStopDefect,IntervalStationare,MotivStationare,DefectFinalizat")] Defect defect)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(plcModel);
+                _context.Add(defect);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(plcModel);
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name", defect.PlcModelID);
+            return View(defect);
         }
 
-        // GET: Plcs/Edit/5
+        // GET: Defects/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,22 +77,23 @@ namespace Don_PlcDashboard_and_Reports.Controllers
                 return NotFound();
             }
 
-            var plcModel = await _context.Plcs.FindAsync(id);
-            if (plcModel == null)
+            var defect = await _context.Defects.FindAsync(id);
+            if (defect == null)
             {
                 return NotFound();
             }
-            return View(plcModel);
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name", defect.PlcModelID);
+            return View(defect);
         }
 
-        // POST: Plcs/Edit/5
+        // POST: Defects/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlcModelID,Name,IsEnable,CpuType,Ip,Rack,Slot")] PlcModel plcModel)
+        public async Task<IActionResult> Edit(int id, [Bind("DefectID,PlcModelID,TimpStartDefect,TimpStopDefect,IntervalStationare,MotivStationare,DefectFinalizat")] Defect defect)
         {
-            if (id != plcModel.PlcModelID)
+            if (id != defect.DefectID)
             {
                 return NotFound();
             }
@@ -101,12 +102,12 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             {
                 try
                 {
-                    _context.Update(plcModel);
+                    _context.Update(defect);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!PlcModelExists(plcModel.PlcModelID))
+                    if (!DefectExists(defect.DefectID))
                     {
                         return NotFound();
                     }
@@ -117,10 +118,11 @@ namespace Don_PlcDashboard_and_Reports.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(plcModel);
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name", defect.PlcModelID);
+            return View(defect);
         }
 
-        // GET: Plcs/Delete/5
+        // GET: Defects/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,30 +130,31 @@ namespace Don_PlcDashboard_and_Reports.Controllers
                 return NotFound();
             }
 
-            var plcModel = await _context.Plcs
-                .FirstOrDefaultAsync(m => m.PlcModelID == id);
-            if (plcModel == null)
+            var defect = await _context.Defects
+                .Include(d => d.PlcModel)
+                .FirstOrDefaultAsync(m => m.DefectID == id);
+            if (defect == null)
             {
                 return NotFound();
             }
 
-            return View(plcModel);
+            return View(defect);
         }
 
-        // POST: Plcs/Delete/5
+        // POST: Defects/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var plcModel = await _context.Plcs.FindAsync(id);
-            _context.Plcs.Remove(plcModel);
+            var defect = await _context.Defects.FindAsync(id);
+            _context.Defects.Remove(defect);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool PlcModelExists(int id)
+        private bool DefectExists(int id)
         {
-            return _context.Plcs.Any(e => e.PlcModelID == id);
+            return _context.Defects.Any(e => e.DefectID == id);
         }
     }
 }

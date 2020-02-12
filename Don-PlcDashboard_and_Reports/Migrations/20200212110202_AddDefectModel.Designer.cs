@@ -4,14 +4,16 @@ using Don_PlcDashboard_and_Reports.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Don_PlcDashboard_and_Reports.Migrations
 {
     [DbContext(typeof(RaportareDbContext))]
-    partial class RaportareDbContextModelSnapshot : ModelSnapshot
+    [Migration("20200212110202_AddDefectModel")]
+    partial class AddDefectModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -26,10 +28,10 @@ namespace Don_PlcDashboard_and_Reports.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<bool?>("DefectFinalizat")
+                    b.Property<bool>("DefectFinalizat")
                         .HasColumnType("bit");
 
-                    b.Property<TimeSpan?>("IntervalStationare")
+                    b.Property<TimeSpan>("IntervalStationare")
                         .HasColumnType("time");
 
                     b.Property<string>("MotivStationare")
@@ -37,12 +39,13 @@ namespace Don_PlcDashboard_and_Reports.Migrations
                         .HasMaxLength(50);
 
                     b.Property<int>("PlcModelID")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasMaxLength(50);
 
                     b.Property<DateTime>("TimpStartDefect")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("TimpStopDefect")
+                    b.Property<DateTime>("TimpStopDefect")
                         .HasColumnType("datetime2");
 
                     b.HasKey("DefectID");

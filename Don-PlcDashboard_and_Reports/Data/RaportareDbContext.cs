@@ -15,6 +15,6 @@ namespace Don_PlcDashboard_and_Reports.Data
 
         public DbSet<PlcModel> Plcs { get; set; }
         public DbSet<TagModel> Tags { get; set; }
-        //public DbSet<ConsumGazModel> ConsumGazModels{ get; set; }
+        public DbSet<Defect> Defects { get; set; }
     }
 }

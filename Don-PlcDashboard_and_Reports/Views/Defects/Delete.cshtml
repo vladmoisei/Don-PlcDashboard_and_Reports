@@ -1,0 +1,57 @@
+﻿@model Don_PlcDashboard_and_Reports.Models.Defect
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Defect</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PlcModel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PlcModel.Name)
+        </dd class>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TimpStartDefect)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TimpStartDefect)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TimpStopDefect)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TimpStopDefect)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IntervalStationare)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IntervalStationare)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MotivStationare)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MotivStationare)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DefectFinalizat)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DefectFinalizat)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="DefectID" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

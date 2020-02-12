@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Don_PlcDashboard_and_Reports.Models.Defect>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.PlcModel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimpStartDefect)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimpStopDefect)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IntervalStationare)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MotivStationare)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefectFinalizat)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlcModel.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimpStartDefect)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TimpStopDefect)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IntervalStationare)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MotivStationare)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefectFinalizat)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DefectID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DefectID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DefectID">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
