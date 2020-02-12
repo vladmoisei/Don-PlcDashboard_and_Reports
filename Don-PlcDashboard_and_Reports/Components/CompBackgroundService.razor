@@ -1,4 +1,5 @@
 ﻿@inject TimedService backgroundWork
+@inject DefectService defectService
 <h2>BackgroundService</h2>
 
 <section id="backgroundService">
@@ -6,12 +7,25 @@
     </div>
     @*<div class="row">  *@
         <h4 id="ceas">Ceas: @backgroundWorkService.LastTimeRunBackgroundWork.ToString("hh:mm:ss")</h4>
-        <h4> Service is Started: @backgroundWork.IsRunnungBackgroundService</h4>
+        <h4> Background Service is Started: @backgroundWork.IsRunnungBackgroundService</h4>
         <h4> Refresh Time Interval: <input type="number" @bind="@backgroundWork.ReadingTimeInterval" /></h4>
     @*</div>*@
     <div class="row">
         <button class="col-md-6 btn @(backgroundWork.IsRunnungBackgroundService?"btn-success":"btn-outline-success")" @onclick="StartBackgroundService">Start Backgorund Service</button>
         <button class="col-md-6 btn @(!backgroundWork.IsRunnungBackgroundService?"btn-danger":"btn-outline-danger")" @onclick="StopBackgroundService">Stop Backgorund Service</button>
+    </div>
+</section>
+
+<h2>DefectService</h2>
+<section id="defectService">
+    <div class="row">
+    </div>
+    <h4> Defect Service is Started: @defectService.IsAvailableDefectService</h4>
+    @*<h4> Refresh Time Interval: <input type="number" @bind="@backgroundWork.ReadingTimeInterval" /></h4>*@
+    @*</div>*@
+    <div class="row">
+        <button class="col-md-6 btn @(defectService.IsAvailableDefectService?"btn-success":"btn-outline-success")" @onclick="StartDefectService">Start Defect Service</button>
+        <button class="col-md-6 btn @(!defectService.IsAvailableDefectService?"btn-danger":"btn-outline-danger")" @onclick="StopDefectService">Stop Defect Service</button>
     </div>
 </section>
 
@@ -23,16 +37,28 @@
         RefreshUi();
     }
 
-    // Click Event Start service
+    // Click Event Start Background service
     public void StartBackgroundService()
     {
         backgroundWork.StartAsync(new System.Threading.CancellationToken(false));
     }
 
-    // Click Event Start service
+    // Click Event Stop Background service
     public void StopBackgroundService()
     {
         backgroundWork.StopAsync(new System.Threading.CancellationToken());
+    }
+
+    // Click Event Start Defect service
+    public void StartDefectService()
+    {
+        defectService.IsAvailableDefectService = true;
+    }
+
+    // Click Event Stop Defect service
+    public void StopDefectService()
+    {
+        defectService.IsAvailableDefectService = false;
     }
 
     // Refresh Ui
