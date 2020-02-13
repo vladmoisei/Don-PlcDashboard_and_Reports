@@ -22,14 +22,14 @@ namespace Don_PlcDashboard_and_Reports.Models
         public DateTime TimpStartDefect { get; set; }
 
         [Display(Name = "Timp Stop Defect")]
-        public DateTime? TimpStopDefect { get; set; }
+        public DateTime TimpStopDefect { get; set; }
 
         [Display(Name = "Interval Stationare")]
-        public TimeSpan? IntervalStationare { get; set; }
+        public TimeSpan IntervalStationare { get; set; }
 
         [StringLength(50, ErrorMessage = "The MotivStationare value cannot exceed 50 characters. ")]
         [Display(Name = "Motiv Stationare")]
-        public string? MotivStationare { get; set; }
+        public string MotivStationare { get; set; }
 
         [Display(Name = "Is Defect Finalizat")]
         public bool? DefectFinalizat { get; set; }

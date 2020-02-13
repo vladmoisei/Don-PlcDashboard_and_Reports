@@ -17,6 +17,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         private readonly ILogger<TimedService> _logger;
         RaportareDbContext _context;
         PlcService _plcService;
+        DefectService _defectService;
         // Timer
         System.Timers.Timer _timer;
         public TimedService(IServiceProvider services, ILogger<TimedService> logger)
@@ -26,6 +27,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             Scope = Services.CreateScope(); // Create Scope
             _context = Scope.ServiceProvider.GetRequiredService<RaportareDbContext>(); // Get DbContext
             _plcService = Scope.ServiceProvider.GetRequiredService<PlcService>(); // Get PlcService
+            _defectService = Scope.ServiceProvider.GetRequiredService<DefectService>(); // Get Defect Service
             // log
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit TimedkService din TimedService Constructor");
         }
@@ -33,7 +35,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         public IServiceScope Scope { get; }
         public bool IsRunnungBackgroundService;
         public DateTime LastTimeRunBackgroundWork;
-        public int ReadingTimeInterval { get; set; } = 1000; // Timp refresh in ms
+        public int ReadingTimeInterval { get; set; } = 2000; // Timp refresh in ms
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -76,13 +78,17 @@ namespace Don_PlcDashboard_and_Reports.Services
                     // Return if plc is not enable
                     if (plc.IsEnable)
                     {
+                        // Add defect Service logic
+                        if (_defectService.IsAvailableDefectService) // if it is enable defectService
+                            _defectService.LogicBrackDowns(_context, plc); // Add defect to Sql list
+
                         var _cancelTasks = new CancellationTokenSource();
                         var task = Task.Run(() =>
                         {
                             if (_plcService.IsConnectedPlc(plc)) // IsConnected also try to reconnect plc if it is available, and disable plc if it has pingrequestsfail grater than a nr
                             {
                                 _plcService.RefreshTagValues(plc); // Refresh value from Plc
-                                _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
+                                // _plcService.UpdateDbContextTagsValue(_context, plc.TagsList); // Write to DbContext Tag Values
                             }
                         }, _cancelTasks.Token);
                         if (!task.Wait(TimeSpan.FromSeconds(0.25))) _cancelTasks.Cancel(); // Daca nu mai raspunde in timp util se opreste Task

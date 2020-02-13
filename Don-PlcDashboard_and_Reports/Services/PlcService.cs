@@ -177,7 +177,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Reset pingRequests Fail at a certain time
         public void RemakeEnablePlc(PlcModel plc)
         {
-            if (DateTime.Now.Second == 10)
+            if (DateTime.Now.Second >= 10 && DateTime.Now.Second <= 15)
             {
                 plc.PingRequestsFail = 0;
                 plc.IsEnable = true;
@@ -271,7 +271,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 plc.PingRequestsFail++;
                 return false;
             }
-            catch(System.Net.NetworkInformation.PingException exPing)
+            catch (System.Net.NetworkInformation.PingException exPing)
             {
                 _logger.LogError("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPing.Message, plc.Name);
                 plc.PingRequestsFail++;

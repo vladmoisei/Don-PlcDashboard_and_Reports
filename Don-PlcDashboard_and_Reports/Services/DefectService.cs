@@ -19,23 +19,31 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Logic IfBrackDownInProgrss Add Defect, Update It, Add Second Defect
         public void LogicBrackDowns(RaportareDbContext context, PlcModel plc)
         {
-            // If is Breakdownin progress and list of defects is empty or last defect is finished
-            if (IsBreakDownInProgress(plc)) {
-                if (GetLastElementByPlc(context, plc) == null)
-                    AddNewDefectForPlc(context, plc);
-                else if (GetLastElementByPlc(context, plc).DefectFinalizat == true)
-                    AddNewDefectForPlc(context, plc);
+            Defect lastDefect = GetLastElementByPlc(context, plc);
+            // If is Breakdown in progress and list of defects is empty or last defect is finished Add Defect to list
+            if (IsBreakDownInProgress(plc)) { // if is brackdown
+                if (lastDefect == null) // if list is empty
+                    AddNewDefectForPlc(context, plc); // Add Defect
+                else if (lastDefect.DefectFinalizat == true) // if list is not empty and last defect is finalised
+                    AddNewDefectForPlc(context, plc); // Add defect
             }
-
+            else // when machine start work again finished defect
+            {
+                if (lastDefect != null && lastDefect.DefectFinalizat == false) //if list is not empty and last defect is not finalised
+                    UpdateLastNotFinishedDefect(context, plc); // finished not finalised defect
+            }
         }
 
         // Add defect to DbContext for a given Plc (Start new defect)
         public void AddNewDefectForPlc(RaportareDbContext context, PlcModel plc)
         {
-            context.Add(new Defect { 
+            context.Add(new Defect {
                 TimpStartDefect = DateTime.Now,
                 DefectFinalizat = false ,
-                PlcModelID = plc.PlcModelID 
+                PlcModelID = plc.PlcModelID,
+                TimpStopDefect = DateTime.Now,
+                IntervalStationare = new TimeSpan(),
+                MotivStationare = "Start Defect"
             });
             context.SaveChanges();
         }
@@ -43,19 +51,34 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Get Last Element by Plc from context
         public Defect GetLastElementByPlc(RaportareDbContext context, PlcModel plc)
         {
-            var defect = context.Defects.LastOrDefault(def => def.PlcModelID == plc.PlcModelID);
+            Defect defect = null;
+            try
+            {
+                defect = context.Defects.Where(def => def.PlcModelID == plc.PlcModelID).ToList().Last();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name));
+                return null;
+            }
+
             if (defect != null) return defect;
             return null;
         }
         // Get Last not finished Defect from given Plc
         public Defect GetLastNotFinishedDefect(RaportareDbContext context, PlcModel plc)
         {
-            // Get Last defect not finished defect of a Plc, from DbContext
-            var defect = context.Defects.LastOrDefault(def => def.PlcModelID == plc.PlcModelID && def.TimpStopDefect == null);
-            if (defect == null)
+            Defect defect = null;
+            try
             {
+                defect = context.Defects.Where(def => def.PlcModelID == plc.PlcModelID && def.DefectFinalizat == false).ToList().Last();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name));
                 return null;
             }
+            // Get Last defect not finished defect of a Plc, from DbContext
 
             return defect;
         }
@@ -63,19 +86,35 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Is Last Added Defect Finished
         public bool IsLastDefectFinshed(RaportareDbContext context, PlcModel plc)
         {
-            // Get Last defect not finished defect of a Plc, from DbContext
-            var defect = context.Defects.Last();
-            if (defect == null)
+            Defect defect = null;
+            try
             {
+                // Get Last defect not finished defect of a Plc, from DbContext
+                defect = context.Defects.Where(p => p.PlcModelID == plc.PlcModelID).Last();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name));
                 return false;
             }
+
             return (bool)defect.DefectFinalizat;
         }
+
         // Update last not finished Defect from given Plc to finished defect
         public void UpdateLastNotFinishedDefect(RaportareDbContext context, PlcModel plc)
         {
-            // Get Last defect not finished defect of a Plc, from DbContext
-            var defect = context.Defects.LastOrDefault(def => def.PlcModelID == plc.PlcModelID && def.TimpStopDefect == null);
+            Defect defect = null;
+            try
+            {
+                // Get Last defect not finished defect of a Plc, from DbContext
+                defect = context.Defects.Where(def => def.PlcModelID == plc.PlcModelID && def.DefectFinalizat == false).ToList().Last();
+            }
+            catch (InvalidOperationException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name));
+                if (defect == null) return;
+            }
 
             // Add MotivStationare, TimpStop Defect, interval Stationare and Defect finalizat
             defect.MotivStationare = GetMotivStationare(plc);
@@ -84,7 +123,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             defect.DefectFinalizat = true;
 
             // Update Database
-            context.Add(defect);
+            context.Update(defect);
             context.SaveChanges();
         }
 
