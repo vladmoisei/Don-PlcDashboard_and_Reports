@@ -18,13 +18,16 @@ namespace Don_PlcDashboard_and_Reports.Models
         [Display(Name = "Plc Name")]
         public virtual PlcModel PlcModel { get; set; }
         
-        [Display(Name = "Timp Start Defect")]
+        [Display(Name = "Timp Start Defect"), DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm:ss}", ApplyFormatInEditMode = false)]
         public DateTime TimpStartDefect { get; set; }
 
-        [Display(Name = "Timp Stop Defect")]
+        [Display(Name = "Timp Stop Defect"), DataType(DataType.Date)]
+        [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy HH:mm:ss}", ApplyFormatInEditMode = false)]
         public DateTime TimpStopDefect { get; set; }
 
         [Display(Name = "Interval Stationare")]
+        [DisplayFormat(DataFormatString = "{0:hh\\:mm\\:ss}", ApplyFormatInEditMode = false)]
         public TimeSpan IntervalStationare { get; set; }
 
         [StringLength(50, ErrorMessage = "The MotivStationare value cannot exceed 50 characters. ")]

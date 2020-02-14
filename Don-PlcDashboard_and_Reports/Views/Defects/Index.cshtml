@@ -9,7 +9,7 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
+<table id="tagTable" class="table">
     <thead>
         <tr>
             <th>
@@ -34,32 +34,50 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.PlcModel.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimpStartDefect)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TimpStopDefect)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IntervalStationare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.MotivStationare)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DefectFinalizat)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DefectID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.DefectID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.DefectID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PlcModel.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimpStartDefect)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimpStopDefect)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IntervalStationare)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MotivStationare)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DefectFinalizat)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.DefectID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.DefectID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.DefectID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@* Scripturi *@
+@section scripts {
+    @*<script src="~/js/site.js"></script>*@
+    @*Resetare automata continut pagina pentru a nu intra in standby*@
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#tagTable').DataTable({
+                dom: 'B<"clear">lfrtip',
+                buttons: {
+                    name: 'primary',
+                    buttons: ['copy', 'csv', 'excel']
+                }
+            });
+        });
+    </script>
+}
