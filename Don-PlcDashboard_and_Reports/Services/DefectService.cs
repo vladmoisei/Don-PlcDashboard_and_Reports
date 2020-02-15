@@ -20,8 +20,8 @@ namespace Don_PlcDashboard_and_Reports.Services
         public void LogicBrackDowns(RaportareDbContext context, PlcModel plc)
         {
             Defect lastDefect = GetLastElementByPlc(context, plc); // Get Last defect from Plc
-            if (lastDefect != null) 
-                lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
+            //if (lastDefect != null) 
+            //    lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
 
             // If is Breakdown in progress and list of defects is empty or last defect is finished Add Defect to list
             if (IsBreakDownInProgress(plc)) { // if is brackdown
@@ -29,6 +29,11 @@ namespace Don_PlcDashboard_and_Reports.Services
                     AddNewDefectForPlc(context, plc); // Add Defect
                 else if (lastDefect.DefectFinalizat == true) // if list is not empty and last defect is finalised
                     AddNewDefectForPlc(context, plc); // Add defect
+                else if (lastDefect.DefectFinalizat == false) // if last defect is not finalised add Motiv Stationare
+                {
+                    lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
+                    context.Update(lastDefect); // Update DbContext with motiv stationare
+                }
             }
             else // when machine start work again finished defect
             {
@@ -108,7 +113,6 @@ namespace Don_PlcDashboard_and_Reports.Services
         public void UpdateLastNotFinishedDefect(RaportareDbContext context, Defect defect)
         {
             // Add MotivStationare, TimpStop Defect, interval Stationare and Defect finalizat
-            //defect.MotivStationare = GetMotivStationare(plc);
             defect.TimpStopDefect = DateTime.Now;
             defect.IntervalStationare = defect.TimpStopDefect - defect.TimpStartDefect;
             defect.DefectFinalizat = true;
