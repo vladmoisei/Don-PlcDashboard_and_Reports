@@ -32,6 +32,8 @@ namespace Don_PlcDashboard_and_Reports.Services
                 else if (lastDefect.DefectFinalizat == false) // if last defect is not finalised add Motiv Stationare
                 {
                     lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
+                    lastDefect.TimpStopDefect = DateTime.Now;  // Add Stop time defect dynamic
+                    lastDefect.IntervalStationare = lastDefect.TimpStopDefect - lastDefect.TimpStartDefect; // Add dynamic interval stationare
                     context.Update(lastDefect); // Update DbContext with motiv stationare
                 }
             }
