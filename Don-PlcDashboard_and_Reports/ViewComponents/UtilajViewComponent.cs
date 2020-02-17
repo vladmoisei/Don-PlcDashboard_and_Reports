@@ -20,9 +20,10 @@ namespace Don_PlcDashboard_and_Reports.ViewComponents
         public bool IsConnected { get; set; }
         public TimeSpan ScanTime { get; set; }
 
-        public async Task<IViewComponentResult> InvokeAsync(string numePlc)
+        public async Task<IViewComponentResult> InvokeAsync(string numePlc, string chartId)
         {
             ViewData["Nume"] = numePlc;
+            @ViewData["chartId"] = chartId;
             return View("Default");
         }
     }

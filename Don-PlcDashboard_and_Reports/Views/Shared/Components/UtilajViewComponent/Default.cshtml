@@ -10,14 +10,14 @@
 </h2>
 
 <div class="row" style="display: block; height: 200px;">
-    <canvas id="myChart"></canvas>
+    <canvas id="@ViewData["chartId"]"></canvas>
 </div>
 
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script>  @*Chart JS*@
 <script>
-    var ctx = document.getElementById('myChart').getContext('2d');
+    var ctx = document.getElementById('@ViewData["chartId"]').getContext('2d');
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
