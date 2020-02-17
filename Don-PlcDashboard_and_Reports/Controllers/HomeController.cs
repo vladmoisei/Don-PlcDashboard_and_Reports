@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Don_PlcDashboard_and_Reports.Models;
+using Don_PlcDashboard_and_Reports.ViewComponents;
 using Don_PlcDashboard_and_Reports.Services;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +29,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         public IActionResult Index()
         {
             return View();
+            //return ViewComponent("UtilajViewComponent");
         }
 
         public IActionResult Privacy()
