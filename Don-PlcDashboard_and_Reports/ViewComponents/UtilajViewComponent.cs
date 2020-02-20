@@ -1,6 +1,7 @@
 ﻿using Don_PlcDashboard_and_Reports.Models;
 using Don_PlcDashboard_and_Reports.Services;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,8 @@ namespace Don_PlcDashboard_and_Reports.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(string numePlc)
         {
             ViewData["Nume"] = numePlc;
-            @ViewData["chartId"] = "chartId"+numePlc;
+            ViewData["chartId"] = "chartId"+numePlc;
+            ViewData["chartData"] = JsonConvert.SerializeObject(GetPlcViewModelByName(numePlc).ChartDefectsInPercent);
             return View("Default", GetPlcViewModelByName(numePlc));
         }
     }

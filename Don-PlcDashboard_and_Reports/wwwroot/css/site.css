@@ -85,8 +85,10 @@ body {
 
 .plc_text_bg_red {
     background-color: red;
+    border-radius: 10px;
 }
 
 .plc_text_bg_green {
     background-color: greenyellow;
+    border-radius: 10px;
 }

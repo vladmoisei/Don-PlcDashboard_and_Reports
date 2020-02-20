@@ -2,13 +2,13 @@
 @{
     ViewData["Title"] = "ViewComponentUtilaj";
 }
-    <div class=@(Model.IsDefectFinalizat?"":"plc_text_bg_red")>
+    <div class=@(Model.IsDefectFinalizat ? "" : "plc_text_bg_red")>
         <h1>@ViewData["Nume"]</h1>
 
-        <h2 class=@(Model.IsDefectFinalizat?"plc_text_bg_green":"")>
+        <h2 class=@(Model.IsDefectFinalizat ? "plc_text_bg_green" : "")>
             @Model.TextAfisare
         </h2>
-        <h3>Randament: </h3>
+        <h3>Randament: @ViewData["chartData"]</h3>
     </div>
     <div class="">
         <canvas id="@ViewData["chartId"]"></canvas>
@@ -21,10 +21,10 @@
     var myChart = new Chart(ctx, {
         type: 'bar',
         data: {
-            labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+            labels: ['Defect mecanic', 'Defect electric', 'Oprire programata', 'Oprire tehnologica', 'Lipsa pod rulant / Lipsa material', 'Nu s-a apasat cauza'],
             datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
+                label: '% of Defects',
+                data: @ViewData["chartData"],
                 backgroundColor: [
                     'rgba(255, 99, 132, 0.2)',
                     'rgba(54, 162, 235, 0.2)',

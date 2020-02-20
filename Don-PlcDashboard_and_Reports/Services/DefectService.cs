@@ -27,7 +27,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 if (lastDefect != null)
                     if (plcViewModel.PlcModel.Name == plc.Name)
                     {
-                        plcViewModel.MapDefect(lastDefect, plc);
+                        plcViewModel.MapDefect(lastDefect, plc, context.Defects.Where(def => def.PlcModelID == plc.PlcModelID).ToList());
                         break;
                     }
             }
@@ -123,7 +123,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 return false;
             }
 
-            return (bool)defect.DefectFinalizat;
+            return defect.DefectFinalizat;
         }
 
         // Update last not finished Defect from given Plc to finished defect

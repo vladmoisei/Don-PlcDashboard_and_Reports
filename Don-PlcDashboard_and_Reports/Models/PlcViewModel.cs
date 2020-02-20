@@ -18,9 +18,10 @@ namespace Don_PlcDashboard_and_Reports.Models
         public double RandamentRealizat { get; set; }
         public bool IsConnected { get; set; }
         public TimeSpan ScanTime { get; set; }
+        public int [] ChartDefectsInPercent { get; set; }
 
         // Map Defect To PlcViewModel
-        public void MapDefect(Defect defect, PlcModel plc)
+        public void MapDefect(Defect defect, PlcModel plc, List<Defect> defects)
         {
             IsConnected = plc.PlcObject.IsConnected;
             if (defect == null) return;
@@ -30,7 +31,66 @@ namespace Don_PlcDashboard_and_Reports.Models
             IsDefectFinalizat = defect.DefectFinalizat;
             NumePlcAfisat = GetNumePlcAfisat(defect);
             TextAfisare = GetTextAfisare();
+            ChartDefectsInPercent = GetItemSourceGraficDefects(defects);
+        }
 
+        // Get Item Source Grafic Stationari TO DO
+        public int[] GetItemSourceGraficDefects(List<Defect> listaDefecte)
+        {
+            double timpTotalDefectMecanic = 0;
+            double timpTotalDefectElectric = 0;
+            double timpTotalOprireProgramata = 0;
+            double timpTotalOprireTehnologica = 0;
+            double timpTotalLipsaMaterialPod = 0;
+            double timpTotalNuS_aApasatCauza = 0;
+            double timpTotalStationari = 0;
+
+            // Calculam timp in ore pentru fiecare motiv stationare si total stationare in ore
+            foreach (Defect defect in listaDefecte)
+            {
+                timpTotalStationari += defect.IntervalStationare.TotalHours;
+                switch (defect.MotivStationare)
+                {
+                    case "Defect mecanic":
+                        timpTotalDefectMecanic += defect.IntervalStationare.TotalHours;
+                        break;
+                    case "Defect electric":
+                        timpTotalDefectElectric += defect.IntervalStationare.TotalHours;
+                        break;
+                    case "Oprire programata":
+                        timpTotalOprireProgramata += defect.IntervalStationare.TotalHours;
+                        break;
+                    case "Oprire tehnologica":
+                        timpTotalOprireTehnologica += defect.IntervalStationare.TotalHours;
+                        break;
+                    case "Lipsa pod rulant / Lipsa material":
+                        timpTotalLipsaMaterialPod += defect.IntervalStationare.TotalHours;
+                        break;
+                    case "Nu s-a apasat cauza":
+                        timpTotalNuS_aApasatCauza += defect.IntervalStationare.TotalHours;
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            // Calculate procent
+            int procentDefectMecanic = (int)Math.Round(timpTotalDefectMecanic / timpTotalStationari * 100);
+            int procentDefectElectric = (int)Math.Round(timpTotalDefectElectric / timpTotalStationari * 100);
+            int procentOprireProgramata = (int)Math.Round(timpTotalOprireProgramata / timpTotalStationari * 100);
+            int procentOprireTehnologica = (int)Math.Round(timpTotalOprireTehnologica / timpTotalStationari * 100);
+            int procentLipsaMaterialPod = (int)Math.Round(timpTotalLipsaMaterialPod / timpTotalStationari * 100);
+            int procentNuS_aApasatCauza = (int)Math.Round(timpTotalNuS_aApasatCauza / timpTotalStationari * 100);
+
+            return new int[]
+               {
+                    procentDefectMecanic,
+                    procentDefectElectric,
+                    procentOprireProgramata,
+                    procentOprireTehnologica,
+                    procentLipsaMaterialPod,
+                    procentNuS_aApasatCauza
+               };
         }
         // Must Run after MapDefect()
         public string GetTextAfisare()
