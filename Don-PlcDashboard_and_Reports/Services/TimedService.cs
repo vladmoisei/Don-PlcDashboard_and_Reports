@@ -80,7 +80,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     {
                         // Add defect Service logic
                         if (_defectService.IsAvailableDefectService) // if it is enable defectService
-                            _defectService.LogicBrackDowns(_context, plc); // Add defect to Sql list
+                            _defectService.LogicBrackDowns(_context, plc, _plcService); // Add defect to Sql list
 
                         var _cancelTasks = new CancellationTokenSource();
                         var task = Task.Run(() =>
@@ -98,6 +98,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 var _cancelTasks2 = new CancellationTokenSource();
                 var task2 = Task.Run(async () =>
                 {
+                    // Save changes to DbContext
                     await _context.SaveChangesAsync();
                 }, _cancelTasks2.Token);
                 if (!task2.Wait(TimeSpan.FromSeconds(0.2))) _cancelTasks2.Cancel(); // Daca nu mai raspunde in timp util se opreste Task

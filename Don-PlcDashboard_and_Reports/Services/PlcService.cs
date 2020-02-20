@@ -19,6 +19,8 @@ namespace Don_PlcDashboard_and_Reports.Services
         public List<PlcModel> ListPlcs;
         // List of Tags
         public List<TagModel> ListTags;
+        // List of PLC Model View 
+        public List<PlcViewModel> ListPlcViewModels;
         // Logger
         private readonly ILogger<PlcService> _logger;
 
@@ -27,6 +29,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             ListPlcs = new List<PlcModel>();
             ListTags = new List<TagModel>();
+            ListPlcViewModels = new List<PlcViewModel>();
             _logger = logger;
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit PlcService din PlcService Constructor");
         }
@@ -120,6 +123,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 plcModel.TagsList = tagList.Where(t => t.PlcModelID == plcModel.PlcModelID).ToList();
                 plcModel.PingRequestsFail = 0; // Initiate with 0 ping requests fail
                 ListPlcs.Add(plcModel);
+                ListPlcViewModels.Add(new PlcViewModel { PlcModel = plcModel} );
             }
         }
 

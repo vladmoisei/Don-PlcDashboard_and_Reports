@@ -4,7 +4,7 @@
 
 <p>
     <button class="btn btn-primary" @onclick="CretePlcList">Create Plc List</button>
-    <button class="btn btn-danger" @onclick="(() => plcService.ListPlcs.Clear())">Clear Plc List</button>
+    <button class="btn btn-danger" @onclick="DeletePlcList">Clear Plc List</button>
 </p>
 <table class="table">
     <thead>
@@ -115,6 +115,14 @@
     private async Task CretePlcList()
     {
         await plcService.InitializeListOfPlcAsync(context);
+    }
+
+    // Click event Delete Plc List
+    private async Task DeletePlcList()
+    {
+        plcService.ListPlcs.Clear();
+        plcService.ListPlcViewModels.Clear();
+        await Task.CompletedTask;
     }
 
     // Click event Connect all Plcs

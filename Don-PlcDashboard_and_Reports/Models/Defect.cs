@@ -35,6 +35,6 @@ namespace Don_PlcDashboard_and_Reports.Models
         public string MotivStationare { get; set; }
 
         [Display(Name = "Is Defect Finalizat")]
-        public bool? DefectFinalizat { get; set; }
+        public bool DefectFinalizat { get; set; }
     }
 }

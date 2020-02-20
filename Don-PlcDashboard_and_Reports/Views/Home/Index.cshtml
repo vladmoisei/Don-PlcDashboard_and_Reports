@@ -1,15 +1,50 @@
-﻿@using Don_PlcDashboard_and_Reports.Components
+﻿@*@using Don_PlcDashboard_and_Reports.Components*@
 @{
     ViewData["Title"] = "Home Page";
 }
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
 
-        <component Id="3" type="typeof(ProbaConnectToService)" render-mode="ServerPrerendered" param-Id="3" />
-        <component type="typeof(ComponentProba)" render-mode="ServerPrerendered" />
-        @*<component type="typeof(ComponentProba)" render-mode="ServerPrerendered" />*@
-        <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    @*<component Id="3" type="typeof(ProbaConnectToService)" render-mode="ServerPrerendered" param-Id="3" />
+        <component type="typeof(ComponentProba)" render-mode="ServerPrerendered" />*@
 
-        <partial name="_ShowMachineStatus"/>
-    </div>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+
+    @*<partial name="_ShowMachineStatus" />*@
+    <div id="dashboard"></div>
+</div>
+
+@section Scripts {
+    @*<script src="~/js/AfisareDate.js">*@
+    <script>
+        // Creare element lista selectie afisare date
+        //let selectieAfisareDateElement = document.getElementById("dashboard");
+        function autoRefreshPage() {
+            //window.location = window.location.href;
+            $.ajax({
+                url: " /Home/_ShowMachineStatus",
+                type: 'GET',
+                //data: {
+                //    numePlc: this.value
+                //},
+                success: function (response) {
+                    console.log(" RAspuns: " + response);
+                    //console.log("Id: " + response.id);
+                    //console.log("Data PReluare: " + response.data);
+                    //console.log(checkWithValue(response.id));
+                    $("#dashboard").html(response);
+                    //chengeCheckBoxWithData(response.id, response.data);
+                },
+                error: function (response) {
+                    console.log("Raspuns din erorr: " + response);
+                }
+
+            });
+            console.log("Refresh page");
+        }
+        setInterval('autoRefreshPage()', 19000); // Resetare la 6 secunde
+
+
+    </script>
+}

@@ -18,10 +18,12 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         private readonly ILogger<HomeController> _logger;
 
         TimedService _backgroundService;
-        public HomeController(ILogger<HomeController> logger, TimedService backGroundService, StartAutBackgroundService bk)
+        PlcService _plcService;
+        public HomeController(ILogger<HomeController> logger, TimedService backGroundService, StartAutBackgroundService bk, PlcService plcService)
         {
             _logger = logger;
-            _backgroundService = backGroundService;            
+            _backgroundService = backGroundService;
+            _plcService = plcService;
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-A CREAT HOMECONTROLLER AR TREBUI SA URMEZE SI BACKGROUND SERVICE");
             _logger.LogInformation("{LasttimeScan} {text}", _backgroundService.LastTimeRunBackgroundWork.ToString("dd.MM.yyyy hh:mm:ss"), "Timp din backgroundService in HomeController");
         }
@@ -32,7 +34,12 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             //return ViewComponent("UtilajViewComponent");
         }
 
-        public IActionResult Privacy()
+        // Return Partial View Dasboard List with PlcViewModel
+        public async Task<IActionResult> _ShowMachineStatus()
+        {
+            return PartialView(_plcService.ListPlcViewModels);
+        }
+            public IActionResult Privacy()
         {
             return View();
         }

@@ -372,3 +372,4 @@ C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Repor
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\bin\Debug\netcoreapp3.1\libman.json
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Views\Home\_ShowMachineStatus.cshtml.g.cs
 C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Razor\Views\Shared\Components\UtilajViewComponent\Default.cshtml.g.cs
+C:\Users\IA\source\repos\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\Don-PlcDashboard_and_Reports\obj\Debug\netcoreapp3.1\Don-PlcDashboard_and_Reports.csprojAssemblyReference.cache

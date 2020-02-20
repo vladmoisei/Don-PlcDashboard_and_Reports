@@ -17,14 +17,28 @@ namespace Don_PlcDashboard_and_Reports.Services
         public bool IsAvailableDefectService { get; set; }
 
         // Logic IfBrackDownInProgrss Add Defect, Update It, Add Second Defect
-        public void LogicBrackDowns(RaportareDbContext context, PlcModel plc)
+        public void LogicBrackDowns(RaportareDbContext context, PlcModel plc, PlcService plcService)
         {
             Defect lastDefect = GetLastElementByPlc(context, plc); // Get Last defect from Plc
+
+            // Add PlcViewModel
+            foreach (var plcViewModel in plcService.ListPlcViewModels)
+            {
+                if (lastDefect != null)
+                    if (plcViewModel.PlcModel.Name == plc.Name)
+                    {
+                        plcViewModel.MapDefect(lastDefect, plc);
+                        break;
+                    }
+            }
+
+            // Not Used anymore
             //if (lastDefect != null) 
             //    lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
 
             // If is Breakdown in progress and list of defects is empty or last defect is finished Add Defect to list
-            if (IsBreakDownInProgress(plc)) { // if is brackdown
+            if (IsBreakDownInProgress(plc))
+            { // if is brackdown
                 if (lastDefect == null) // if list is empty
                     AddNewDefectForPlc(context, plc); // Add Defect
                 else if (lastDefect.DefectFinalizat == true) // if list is not empty and last defect is finalised
@@ -47,9 +61,10 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Add defect to DbContext for a given Plc (Start new defect)
         public void AddNewDefectForPlc(RaportareDbContext context, PlcModel plc)
         {
-            context.Add(new Defect {
+            context.Add(new Defect
+            {
                 TimpStartDefect = DateTime.Now,
-                DefectFinalizat = false ,
+                DefectFinalizat = false,
                 PlcModelID = plc.PlcModelID,
                 TimpStopDefect = DateTime.Now,
                 IntervalStationare = new TimeSpan(),
@@ -64,7 +79,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             Defect defect = null;
             try
             {
-                defect = context.Defects.Where(def => def.PlcModelID == plc.PlcModelID).ToList().Last();
+                defect = context.Defects.Include(t => t.PlcModel).Where(def => def.PlcModelID == plc.PlcModelID).ToList().Last();
             }
             catch (InvalidOperationException ex)
             {
