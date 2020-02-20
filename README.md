@@ -12,6 +12,7 @@ The project consists in 3 parts:
 * Reading signals from PLC
 * Save/ Retrieve data from SQL Server in excel
 * Send mail automatically
+* Blazor Components
 * View components in ASP.NET Core
 * Partial View
 * JavaScript - Use AJAX Calls
