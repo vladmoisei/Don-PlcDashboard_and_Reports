@@ -14,11 +14,12 @@ namespace Don_PlcDashboard_and_Reports.Models
         public DateTime TimpStartDefect { get; set; }
         public DateTime TimpStopDefect { get; set; }
         public bool IsDefectFinalizat { get; set; }
-        public double RandamentActual { get; set; }
-        public double RandamentRealizat { get; set; }
+        public string RandamentActual { get; set; }
+        public string RandamentRealizat { get; set; }
         public bool IsConnected { get; set; }
         public TimeSpan ScanTime { get; set; }
-        public int [] ChartDefectsInPercent { get; set; }
+        public int[] ChartDefectsInPercent { get; set; }
+
 
         // Map Defect To PlcViewModel
         public void MapDefect(Defect defect, PlcModel plc, List<Defect> defects)
@@ -32,8 +33,38 @@ namespace Don_PlcDashboard_and_Reports.Models
             NumePlcAfisat = GetNumePlcAfisat(defect);
             TextAfisare = GetTextAfisare();
             ChartDefectsInPercent = GetItemSourceGraficDefects(defects);
+            RandamentRealizat = GetRandamentRealizat(defects);
         }
+        // Get Randament Total
+        public string GetRandamentRealizat(List<Defect> listaDefecte)
+        {
+            if (listaDefecte.Count > 0)
+            {
+                // Declar variabile calcul
+                TimeSpan interval = DateTime.Now - listaDefecte.FirstOrDefault().TimpStartDefect;
+                double maxHoursFunctionare = 24;
+                double totalHoursStationare = 0.0;
+                double totalHoursFunctionare = 0.0;
+                double totalHoursOprireProgramata = 0.0;
+                double randamentActual = 0.0;
 
+                maxHoursFunctionare = interval.TotalHours;
+                // Calcul randament
+                foreach (Defect defect in listaDefecte)
+                {
+                    if (defect.MotivStationare == "Oprire programata")
+                        totalHoursOprireProgramata += defect.IntervalStationare.TotalHours;
+                    else totalHoursStationare += defect.IntervalStationare.TotalHours;
+                }
+
+                maxHoursFunctionare -= totalHoursOprireProgramata;
+                totalHoursFunctionare = maxHoursFunctionare - totalHoursStationare;
+                randamentActual = (totalHoursFunctionare / maxHoursFunctionare) * 100;
+                
+                return "R. Realizat: " + randamentActual.ToString("f0") + "%";
+            }
+            return "R. Realizat: 100%";
+        }
         // Get Item Source Grafic Stationari TO DO
         public int[] GetItemSourceGraficDefects(List<Defect> listaDefecte)
         {

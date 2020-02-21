@@ -8,7 +8,7 @@
         <h2 class=@(Model.IsDefectFinalizat ? "plc_text_bg_green" : "")>
             @Model.TextAfisare
         </h2>
-        <h3>Randament: @ViewData["chartData"]</h3>
+        <h3>@Model.RandamentRealizat</h3>
     </div>
     <div class="">
         <canvas id="@ViewData["chartId"]"></canvas>

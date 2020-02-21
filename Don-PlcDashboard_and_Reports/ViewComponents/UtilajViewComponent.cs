@@ -34,10 +34,11 @@ namespace Don_PlcDashboard_and_Reports.ViewComponents
         // Function called from View for each Plc 
         public async Task<IViewComponentResult> InvokeAsync(string numePlc)
         {
+            PlcViewModel plcViewModel = GetPlcViewModelByName(numePlc); // Plc View Model by Plc name
             ViewData["Nume"] = numePlc;
             ViewData["chartId"] = "chartId"+numePlc;
-            ViewData["chartData"] = JsonConvert.SerializeObject(GetPlcViewModelByName(numePlc).ChartDefectsInPercent);
-            return View("Default", GetPlcViewModelByName(numePlc));
+            ViewData["chartData"] = JsonConvert.SerializeObject(plcViewModel.ChartDefectsInPercent); // Serialize ChartData to pass it in JS variable
+            return View("Default", plcViewModel); // Pass Plc View model to view
         }
     }
 }
