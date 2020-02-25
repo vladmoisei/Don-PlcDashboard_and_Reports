@@ -27,7 +27,7 @@ The project consists in 3 parts:
 * - EntityFrameworkCore
 
 # Project Images
-![Dashboard View](/Don-PlcDashboard_and_Reports/images/Dashboard Photos/Dashboard.png)
-![PlcService View](/Don-PlcDashboard_and_Reports/images/Dashboard Photos/PlcService.png)
-![PlcIndex View](/Don-PlcDashboard_and_Reports/images/Dashboard Photos/PlcIndex.png)
-![TagIndex View](/Don-PlcDashboard_and_Reports/images/Dashboard Photos/TagIndex.png)
+* ![Dashboard View](/images/Dashboard Photos/Dashboard.png)
+* ![PlcService View](/images/Dashboard Photos/PlcService.png)
+* ![PlcIndex View](/images/Dashboard Photos/PlcIndex.png)
+* ![TagIndex View](/images/Dashboard Photos/TagIndex.png)
