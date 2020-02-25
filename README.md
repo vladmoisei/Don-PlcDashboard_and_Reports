@@ -28,10 +28,10 @@ The project consists in 3 parts:
 
 # Project Images
 * ![Dashboard View](/images/Dashboard Photos/Dashboard.png)
-Format: ![Alt Text](url)
+Format: ![Dashboard View](/images/Dashboard Photos/TagIndex.png)
 * ![PlcService View](/images/Dashboard Photos/PlcService.png)
-Format: ![Alt Text](url)
+Format: ![PlcService View](/images/Dashboard Photos/TagIndex.png)
 * ![PlcIndex View](/images/Dashboard Photos/PlcIndex.png)
-Format: ![Alt Text](url)
+Format: ![PlcIndex View](/images/Dashboard Photos/TagIndex.png)
 * ![TagIndex View](/images/Dashboard Photos/TagIndex.png)
-Format: ![Alt Text](url)
+Format: ![TagIndex View](/images/Dashboard Photos/TagIndex.png)
