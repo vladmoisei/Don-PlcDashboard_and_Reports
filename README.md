@@ -27,7 +27,8 @@ The project consists in 3 parts:
 * - EntityFrameworkCore
 
 # Project Images
-* ![GitHub Logo](/Dashboard.png)
-* ![GitHub Logo](/PlcService.png)
-* ![GitHub Logo](/PlcIndex.png)
-* ![GitHub Logo](/TagIndex.png)
+* ![Dashboard](/images/Dashboard.png)
+* ![Plc Service](/images/PlcService.png)
+* ![Plc Index](/images/PlcIndex.png)
+* ![Tag Index](/images/TagIndex.png)
+* ![List of Stoppages](/images/ListOfStoppages.png)
