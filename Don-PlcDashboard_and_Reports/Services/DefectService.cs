@@ -17,10 +17,16 @@ namespace Don_PlcDashboard_and_Reports.Services
         public bool IsAvailableDefectService { get; set; }
 
         // Logic IfBrackDownInProgrss Add Defect, Update It, Add Second Defect
-        public void LogicBrackDowns(RaportareDbContext context, PlcModel plc, PlcService plcService)
+        public void LogicBrackDowns(RaportareDbContext context, PlcModel plc, PlcService plcService, ReportService reportService)
         {
             Defect lastDefect = GetLastElementByPlc(context, plc); // Get Last defect from Plc
 
+            // If is time of report finalise last defect and send mail (added for report excel file)
+            if (lastDefect != null && lastDefect.DefectFinalizat == false) { //if list is not empty and last defect is not finalised
+                UpdateLastNotFinishedDefect(context, lastDefect); // finished not finalised defect
+                // make report if it is time TODO
+                if (reportService.IsReportTime())
+            }
             // Add PlcViewModel
             foreach (var plcViewModel in plcService.ListPlcViewModels)
             {
@@ -31,10 +37,6 @@ namespace Don_PlcDashboard_and_Reports.Services
                         break;
                     }
             }
-
-            // Not Used anymore
-            //if (lastDefect != null) 
-            //    lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
 
             // If is Breakdown in progress and list of defects is empty or last defect is finished Add Defect to list
             if (IsBreakDownInProgress(plc))
