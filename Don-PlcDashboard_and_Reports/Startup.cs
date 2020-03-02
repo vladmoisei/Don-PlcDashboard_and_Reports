@@ -40,6 +40,7 @@ namespace Don_PlcDashboard_and_Reports
             services.AddSingleton<PlcService>(); // Added Plc service, startd directly because it is not derived
             services.AddSingleton<TimedService>(); // Background Timd service
             services.AddSingleton<DefectService>(); // Defect Service
+            services.AddSingleton<ReportService>(); // Report Service
             services.AddSingleton<StartAutBackgroundService>();
         }
 

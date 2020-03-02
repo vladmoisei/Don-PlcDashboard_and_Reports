@@ -17,11 +17,25 @@ namespace Don_PlcDashboard_and_Reports.Services
         public String MailList { get; set; }
         public string MailSubject { get; set; }
         public string MailBodyText { get; set; }
+        public string MailFilePath { get; set; }
         public void SendDaillyReport(DateTime time)
         {
             MailSubject = "Raport stationari utilaje ajustaj";
             MailBodyText = string.Format("Buna dimineata. <br>Atasat gasiti raport stationari utilaje ajustaj <br>O zi buna.");
 
+        }
+
+        // Function make report and send mail if it is time
+        public void MakeReport(RaportareDbContext context)
+        {
+            if (IsReportTime(TimeOfReport))
+            {
+                if (!string.IsNullOrEmpty(MailList) && !string.IsNullOrEmpty(MailFilePath))
+                {
+                    MailFilePath = SaveExcelFileToDisk(DateTime.Now, DateTime.Now, context);
+                    SendMail(MailList, MailFilePath, MailSubject, MailBodyText);
+                }
+            }
         }
 
         // Function Check if TimeNow is biggger than the report set time

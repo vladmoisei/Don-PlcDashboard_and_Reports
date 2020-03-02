@@ -18,6 +18,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         RaportareDbContext _context;
         PlcService _plcService;
         DefectService _defectService;
+        ReportService _reportService;
         // Timer
         System.Timers.Timer _timer;
         public TimedService(IServiceProvider services, ILogger<TimedService> logger)
@@ -28,6 +29,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             _context = Scope.ServiceProvider.GetRequiredService<RaportareDbContext>(); // Get DbContext
             _plcService = Scope.ServiceProvider.GetRequiredService<PlcService>(); // Get PlcService
             _defectService = Scope.ServiceProvider.GetRequiredService<DefectService>(); // Get Defect Service
+            _reportService = Scope.ServiceProvider.GetRequiredService<ReportService>(); // Get Report Service
             // log
             _logger.LogInformation("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit TimedkService din TimedService Constructor");
         }
@@ -80,7 +82,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     {
                         // Add defect Service logic
                         if (_defectService.IsAvailableDefectService) // if it is enable defectService
-                            _defectService.LogicBrackDowns(_context, plc, _plcService); // Add defect to Sql list
+                            _defectService.LogicBrackDowns(_context, plc, _plcService, _reportService); // Add defect to Sql list
 
                         var _cancelTasks = new CancellationTokenSource();
                         var task = Task.Run(() =>
