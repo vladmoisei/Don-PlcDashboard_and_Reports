@@ -30,14 +30,24 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             if (IsReportTime(TimeOfReport))
             {
-                if (!string.IsNullOrEmpty(MailList) && !string.IsNullOrEmpty(MailFilePath))
+                if (!string.IsNullOrEmpty(MailList))
                 {
-                    MailFilePath = SaveExcelFileToDisk(DateTime.Now, DateTime.Now, context);
+                    TimeOfReport =ChangeDateKeepTime(TimeOfReport); // Add curent Date to Time Of report Variable, used to Save excel file for the previous day
+                    MailFilePath = SaveExcelFileToDisk(TimeOfReport.AddDays(-1), TimeOfReport, context);
                     SendMail(MailList, MailFilePath, MailSubject, MailBodyText);
                 }
             }
         }
-
+        public DateTime ChangeDateKeepTime(DateTime time)
+        {
+            return new DateTime(
+                DateTime.Now.Year,
+                DateTime.Now.Month,
+                DateTime.Now.Day,
+                time.Hour,
+                time.Minute,
+                time.Second);
+        }
         // Function Check if TimeNow is biggger than the report set time
         public bool IsReportTime(DateTime time)
         {

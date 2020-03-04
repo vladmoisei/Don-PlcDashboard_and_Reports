@@ -2,10 +2,20 @@
 <h3>Report Service Data Set</h3>
 
 <p>Lista Mail raport: </p>
-<input class="col-md-10" type="text" />
+<input class="col-md-10" type="text" @bind="raportService.MailList"/>
 <p>Setare timp Raportare:</p>
-<input type="time" />
+<input type="time" @bind="raportService.TimeOfReport"/>
+<button class="btn btn-primary" @onclick="SetOraAndMailReport">Set data</button>
 
 @code {
-
+    string mailList;
+    DateTime oraRaport;
+    // Click Event Btn Set Hour And Mail Report
+    public void SetOraAndMailReport()
+    {
+        Console.WriteLine(raportService.TimeOfReport.TimeOfDay.ToString());
+        Console.WriteLine(DateTime.Now.TimeOfDay.ToString());
+        Console.WriteLine("Is Report time: {0}", raportService.IsReportTime(raportService.TimeOfReport));
+        Console.WriteLine(raportService.TimeOfReport.ToString());
+    }
 }
