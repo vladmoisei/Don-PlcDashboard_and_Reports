@@ -26,17 +26,21 @@ namespace Don_PlcDashboard_and_Reports.Services
         }
 
         // Function make report and send mail if it is time
-        public void MakeReport(RaportareDbContext context)
+        public bool MakeReport(RaportareDbContext context)
         {
             if (IsReportTime(TimeOfReport))
             {
                 if (!string.IsNullOrEmpty(MailList))
                 {
                     TimeOfReport =ChangeDateKeepTime(TimeOfReport); // Add curent Date to Time Of report Variable, used to Save excel file for the previous day
+                    MailSubject = "Raport stationari utilaje ajustaj";
+                    MailBodyText = string.Format("Buna dimineata. <br>Atasat gasiti raport stationari utilaje ajustaj <br>O zi buna.");
                     MailFilePath = SaveExcelFileToDisk(TimeOfReport.AddDays(-1), TimeOfReport, context);
                     SendMail(MailList, MailFilePath, MailSubject, MailBodyText);
+                    return true;
                 }
             }
+            return false;
         }
         public DateTime ChangeDateKeepTime(DateTime time)
         {
@@ -141,6 +145,29 @@ namespace Don_PlcDashboard_and_Reports.Services
             return false;
         }
 
+        // Query function Group By Single Property of object
+        public IOrderedEnumerable<IGrouping<string, Defect>> GroupBySingleProperty(IEnumerable<Defect> listOfDefects)
+        {
+            Console.WriteLine("Group by a single property in an object:");
+
+            // Variable queryLastNames is an IEnumerable<IGrouping<string, 
+            // DataClass.Student>>. 
+            var queryPlcModelNames =
+                from defect in listOfDefects
+                group defect by defect.PlcModel.Name into newGroup
+                orderby newGroup.Key
+                select newGroup;
+
+            //foreach (var nameGroup in queryPlcModelNames)
+            //{
+            //    Console.WriteLine($"Key: {nameGroup.Key}");
+            //    foreach (var defect in nameGroup)
+            //    {
+            //        Console.WriteLine($"\t{defect.PlcModel.Name}");
+            //    }
+            //}
+            return queryPlcModelNames;
+        }
         // Functie creare fisier excel cu consumul lunar
         // Functie exportare data to excel file and save to disk
         // returneaza FilePath
@@ -148,32 +175,27 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             List<Defect> listaDeAfisat = new List<Defect>(); // List to be writen in excel
             //return Content(dataFrom + "<==>" + dataTo);
-            List<Defect> listaSql = _context.Defects.Where(model => IsDateBetween(model.TimpStartDefect, dataFrom, dataTo)).ToList();
+            // Collect Data between given dates
+            IEnumerable<Defect> listaSql = _context.Defects.Where(model => model.TimpStartDefect.CompareTo(dataFrom) >= 0 && model.TimpStartDefect.CompareTo(dataTo) <= 0);
 
-            // Sort data by TimpStartDefect and group by plc name
-            var listaExcel = listaSql.OrderBy(item => item.TimpStartDefect).GroupBy(item => item.PlcModel.Name).Select(g => new
-            {
-                Type = g.Key,
-                Grupuri = g.Select(defect => new
-                {
-                    defect.PlcModel,
-                    defect.TimpStartDefect,
-                    defect.TimpStopDefect,
-                    defect.MotivStationare,
-                    defect.IntervalStationare
-                })
-            });
+            // Sort data by TimpStartDefect
+            var listaExcel = listaSql.OrderBy(item => item.TimpStartDefect);
 
             // Create list to for excel file from data grouped by plc and sorted by TimpStartdefect
-            foreach (var grup in listaExcel)
+            foreach (var nameGroup in GroupBySingleProperty(listaExcel))
             {
-                foreach (var defect in grup.Grupuri)
+                Console.WriteLine($"Key: {nameGroup.Key}");
+                foreach (var defect in nameGroup)
                 {
-                    listaDeAfisat.Add(new Defect { PlcModel = defect.PlcModel,
-                    TimpStartDefect = defect.TimpStartDefect,
-                    TimpStopDefect = defect.TimpStopDefect,
-                    MotivStationare = defect.MotivStationare,
-                    IntervalStationare = defect.IntervalStationare});
+                    Console.WriteLine($"\t{defect.PlcModel.Name}");
+                    listaDeAfisat.Add(new Defect
+                    {
+                        PlcModel = defect.PlcModel,
+                        TimpStartDefect = defect.TimpStartDefect,
+                        TimpStopDefect = defect.TimpStopDefect,
+                        MotivStationare = defect.MotivStationare,
+                        IntervalStationare = defect.IntervalStationare
+                    });
                 }
             }
 

@@ -173,9 +173,10 @@ namespace Don_PlcDashboard_and_Reports.Services
         }
 
         // Check pingRequests grater than a nr and disable Plc
-        public void IsPingRequestsFailGrateThan(PlcModel plc, int nr)
+        public bool IsPingRequestsFailGrateThan(PlcModel plc, int nr)
         {
-            if (plc.PingRequestsFail >= nr) plc.IsEnable = false;
+            if (plc.PingRequestsFail >= nr) return true;
+            return false;
         }
 
         // Reset pingRequests Fail at a certain time
@@ -184,7 +185,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             if (DateTime.Now.Second >= 10 && DateTime.Now.Second <= 15)
             {
                 plc.PingRequestsFail = 0;
-                plc.IsEnable = true;
+                //plc.IsEnable = true;
             }
         }
 
@@ -193,8 +194,8 @@ namespace Don_PlcDashboard_and_Reports.Services
         // return true if it is connected
         public bool IsConnectedPlc(PlcModel plc)
         {
-            // If Plc RequestsFail is grater than a nr, disable plc
-            IsPingRequestsFailGrateThan(plc, 5);
+            // If Plc RequestsFail is grater than a nr, disable read tag signals
+            if (IsPingRequestsFailGrateThan(plc, 5)) return false;
             // Try to reconnect plc if it is available
             try
             {

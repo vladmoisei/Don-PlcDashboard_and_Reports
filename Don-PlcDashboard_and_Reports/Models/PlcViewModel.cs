@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Don_PlcDashboard_and_Reports.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,9 +23,9 @@ namespace Don_PlcDashboard_and_Reports.Models
 
 
         // Map Defect To PlcViewModel
-        public void MapDefect(Defect defect, PlcModel plc, List<Defect> defects)
+        public void MapDefect(PlcService plcService,Defect defect, PlcModel plc, List<Defect> defects)
         {
-            IsConnected = plc.PlcObject.IsConnected;
+            IsConnected = plcService.IsAvailableIpAdress(plc);
             if (defect == null) return;
             MotivStationare = defect.MotivStationare;
             TimpStartDefect = defect.TimpStartDefect;
@@ -128,7 +129,7 @@ namespace Don_PlcDashboard_and_Reports.Models
         {
             if (IsDefectFinalizat)
             {
-                TimeSpan interval = DateTime.Now - TimpStopDefect;
+                TimeSpan interval = LimitMaxTimeSpan(TimpStopDefect, DateTime.Now);
                 if (interval.TotalHours >= 1)
                     return "Functioneaza de " + interval.TotalHours.ToString("f1") + " ore";
 
@@ -136,13 +137,20 @@ namespace Don_PlcDashboard_and_Reports.Models
             }
             else
             {
-                TimeSpan interval = DateTime.Now - TimpStartDefect;
+                TimeSpan interval = LimitMaxTimeSpan(TimpStartDefect, DateTime.Now);
                 if (interval.TotalHours >= 1)
                     return MotivStationare + " de " + interval.TotalHours.ToString("f1") + " ore";
                 return MotivStationare + " de " + interval.TotalMinutes.ToString("f0") + " min";
             }
         }
 
+        // Function Limit Max TimeSpan, don't pass maximum range
+        public TimeSpan LimitMaxTimeSpan(DateTime timpStart, DateTime timpStop)
+        {
+            if ((timpStop - timpStart) >= TimeSpan.MaxValue)
+                return TimeSpan.MaxValue;
+            return timpStop - timpStart;
+        }
         public string GetNumePlcAfisat(Defect defect)
         {
             // Set Nume PLC Afisat by PlcModel.Name

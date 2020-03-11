@@ -22,10 +22,11 @@ namespace Don_PlcDashboard_and_Reports.Services
             Defect lastDefect = GetLastElementByPlc(context, plc); // Get Last defect from Plc
 
             // If is time of report finalise last defect and send mail (added for report excel file)
-            if (lastDefect != null && lastDefect.DefectFinalizat == false) { //if list is not empty and last defect is not finalised
-                UpdateLastNotFinishedDefect(context, lastDefect); // finished not finalised defect
+            if (lastDefect != null && lastDefect.DefectFinalizat == false)
+            { //if list is not empty and last defect is not finalised
                 // make report if it is time TODO
-                reportService.MakeReport(context); // make report to excel
+                if (reportService.MakeReport(context)) // make report to excel
+                    UpdateLastNotFinishedDefect(context, lastDefect); // finished not finalised defect
             }
             // Add PlcViewModel
             foreach (var plcViewModel in plcService.ListPlcViewModels)
@@ -33,7 +34,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 if (lastDefect != null)
                     if (plcViewModel.PlcModel.Name == plc.Name)
                     {
-                        plcViewModel.MapDefect(lastDefect, plc, context.Defects.Where(def => def.PlcModelID == plc.PlcModelID).ToList());
+                        plcViewModel.MapDefect(plcService, lastDefect, plc, context.Defects.Where(def => def.PlcModelID == plc.PlcModelID).ToList());
                         break;
                     }
             }
@@ -47,9 +48,20 @@ namespace Don_PlcDashboard_and_Reports.Services
                     AddNewDefectForPlc(context, plc); // Add defect
                 else if (lastDefect.DefectFinalizat == false) // if last defect is not finalised add Motiv Stationare
                 {
-                    lastDefect.MotivStationare = GetMotivStationare(plc); // Add Motiv Stationare to lastDefect when it is pressed the button
+                    lastDefect.MotivStationare = GetMotivStationare(plcService, plc); // Add Motiv Stationare to lastDefect when it is pressed the button
                     lastDefect.TimpStopDefect = DateTime.Now;  // Add Stop time defect dynamic
-                    lastDefect.IntervalStationare = lastDefect.TimpStopDefect - lastDefect.TimpStartDefect; // Add dynamic interval stationare
+                    // Catch overflow error to IntervalStationare
+                    try
+                    {
+                        lastDefect.IntervalStationare = LimitMaxTimeSpan(lastDefect.TimpStartDefect, lastDefect.TimpStopDefect);// Add dynamic interval stationare
+                        // Limit the Interval Stationare Max Value
+                    }
+                    catch (OverflowException ex)
+                    {
+                        Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, lastDefect.PlcModel.Name));
+                        lastDefect.IntervalStationare = TimeSpan.MaxValue;
+                    }
+
                     context.Update(lastDefect); // Update DbContext with motiv stationare
                 }
             }
@@ -128,26 +140,43 @@ namespace Don_PlcDashboard_and_Reports.Services
             return defect.DefectFinalizat;
         }
 
+        // Function Limit Max TimeSpan, don't pass maximum range
+        public TimeSpan LimitMaxTimeSpan(DateTime timpStart, DateTime timpStop)
+        {
+            if ((timpStop - timpStart) >= TimeSpan.MaxValue)
+                return TimeSpan.MaxValue;
+            return timpStop - timpStart;
+        }
         // Update last not finished Defect from given Plc to finished defect
         public void UpdateLastNotFinishedDefect(RaportareDbContext context, Defect defect)
         {
             // Add MotivStationare, TimpStop Defect, interval Stationare and Defect finalizat
             defect.TimpStopDefect = DateTime.Now;
-            defect.IntervalStationare = defect.TimpStopDefect - defect.TimpStartDefect;
-            defect.DefectFinalizat = true;
+            // Catch overflow error to IntervalStationare
+            try
+            {
+                // Limit the Interval Stationare Max Value
+                defect.IntervalStationare = LimitMaxTimeSpan(defect.TimpStartDefect, defect.TimpStopDefect);
+            }
+            catch (OverflowException ex)
+            {
+                defect.IntervalStationare = TimeSpan.MaxValue;
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, defect.PlcModel.Name));
+            }
 
+            defect.DefectFinalizat = true;
             // Update Database
             context.Update(defect);
             context.SaveChanges();
         }
 
         // Get MotivStationare from Plc Tag
-        public string GetMotivStationare(PlcModel plc)
+        public string GetMotivStationare(PlcService plcService, PlcModel plc)
         {
             // Check if plc is not connected and return messege Plc DEconectat
             try
             {
-                if (!plc.PlcObject.IsConnected) return "Plc Deconectat";
+                if (!plcService.IsAvailableIpAdress(plc)) return "Plc Deconectat";
             }
             catch (PlcException exPlc)
             {
