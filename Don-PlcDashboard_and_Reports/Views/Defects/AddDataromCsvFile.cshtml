@@ -1,0 +1,24 @@
+﻿@{
+    ViewData["Title"] = "AddDataromCsvFile";
+}
+
+<h1>AddDataromCsvFile</h1>
+
+<h4>Add data foreach plc from csv file to SQL Server</h4>
+
+<div class="row">
+    <form enctype="multipart/form-data" asp-action="AddDataromCsvFile">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group">
+            <label for="PlcModelID" class="control-label"></label>
+            <select id="PlcModelID" name="PlcModelID" class="form-control" asp-items="ViewBag.PlcModelID"></select>
+        </div>
+        <div class="form-group">
+            <label for="Fisier" class="control-label"></label>
+            <input type="file" name="file"/>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Incarca" class="btn btn-primary" />
+        </div>
+    </form>
+</div>

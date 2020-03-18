@@ -1,10 +1,13 @@
 ﻿using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using S7.Net;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Threading;
@@ -212,5 +215,56 @@ namespace Don_PlcDashboard_and_Reports.Services
             return Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "BreakDown2InProgress").ToList().FirstOrDefault().Value);
         }
 
+        // Added logic to import Data From Csv Files
+        // Methods to read csv file and import return list of defects
+
+        // Functie convertire din string in dateTime format
+        public DateTime GetDateTimeFromString(string dateToParse)
+        {
+
+            DateTime parsedDate = DateTime.ParseExact(dateToParse,
+                                                      "dd/MM/yyyy HH:mm",
+                                                      CultureInfo.InvariantCulture);
+            return parsedDate;
+        }
+
+        // Functie convertire din string in timespan format
+        public TimeSpan GetTimeSpanFromString(string dateToParse)
+        {
+
+            TimeSpan parsedDate = TimeSpan.Parse(dateToParse);
+            return parsedDate;
+        }
+
+        // Functie Get Defect Values From CSV File
+        public List<Defect> GetListOfDefectsFromFileCSV(IFormFile file, int plcModelId)
+        {
+            List<Defect> listaDefecte = new List<Defect>();
+            using (var ms = new MemoryStream())
+            {
+                file.CopyTo(ms);
+                using (var reader = new StreamReader(ms, System.Text.Encoding.UTF8, true))
+                {
+                    reader.ReadLine();
+                    while (!reader.EndOfStream)
+                    {
+                        var line = reader.ReadLine();
+                        var values = line.Split(',');
+
+                        listaDefecte.Add(new Defect
+                        {
+                            TimpStartDefect = GetDateTimeFromString(values[1]),
+                            DefectFinalizat = true,
+                            PlcModelID = plcModelId,
+                            TimpStopDefect = GetDateTimeFromString(values[2]),
+                            IntervalStationare = GetTimeSpanFromString(values[4]),
+                            MotivStationare = values[3]
+                        });
+                    }
+                }
+            }
+            
+            return listaDefecte;
+        }
     }
 }

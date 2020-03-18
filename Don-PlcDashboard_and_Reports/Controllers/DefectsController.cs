@@ -7,16 +7,20 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
+using Microsoft.AspNetCore.Http;
+using Don_PlcDashboard_and_Reports.Services;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
     public class DefectsController : Controller
     {
         private readonly RaportareDbContext _context;
+        private readonly DefectService _defectService;
 
-        public DefectsController(RaportareDbContext context)
+        public DefectsController(RaportareDbContext context, DefectService defectService)
         {
             _context = context;
+            _defectService = defectService;
         }
 
         // GET: Defects
@@ -155,6 +159,33 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         private bool DefectExists(int id)
         {
             return _context.Defects.Any(e => e.DefectID == id);
+        }
+
+        // Methods to import data from Csv Files
+        // GET: Defects/Create
+        public IActionResult AddDataromCsvFile()
+        {
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name");
+            return View();
+        }
+
+        // POST: Defects/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddDataromCsvFile(int PlcModelID, IFormFile file)
+        {
+            if (file != null)
+            {
+                string numeFisier = file.FileName;
+                List<Defect> defects = _defectService.GetListOfDefectsFromFileCSV(file, PlcModelID);
+                _context.Defects.AddRange(defects);
+                _context.SaveChanges();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name", PlcModelID);
+            return View();
         }
     }
 }
