@@ -240,30 +240,27 @@ namespace Don_PlcDashboard_and_Reports.Services
         public List<Defect> GetListOfDefectsFromFileCSV(IFormFile file, int plcModelId)
         {
             List<Defect> listaDefecte = new List<Defect>();
-            using (var ms = new MemoryStream())
+            using (var reader = new StreamReader(file.OpenReadStream()))
             {
-                file.CopyTo(ms);
-                using (var reader = new StreamReader(ms, System.Text.Encoding.UTF8, true))
+                reader.ReadLine();
+                while (!reader.EndOfStream)
                 {
-                    reader.ReadLine();
-                    while (!reader.EndOfStream)
-                    {
-                        var line = reader.ReadLine();
-                        var values = line.Split(',');
+                    var line = reader.ReadLine();
+                    if (line == null) continue;
+                    var values = line.Split(',');
 
-                        listaDefecte.Add(new Defect
-                        {
-                            TimpStartDefect = GetDateTimeFromString(values[1]),
-                            DefectFinalizat = true,
-                            PlcModelID = plcModelId,
-                            TimpStopDefect = GetDateTimeFromString(values[2]),
-                            IntervalStationare = GetTimeSpanFromString(values[4]),
-                            MotivStationare = values[3]
-                        });
-                    }
+                    listaDefecte.Add(new Defect
+                    {
+                        TimpStartDefect = GetDateTimeFromString(values[1]),
+                        DefectFinalizat = true,
+                        PlcModelID = plcModelId,
+                        TimpStopDefect = GetDateTimeFromString(values[2]),
+                        IntervalStationare = GetTimeSpanFromString(values[4]),
+                        MotivStationare = values[3]
+                    });
                 }
             }
-            
+
             return listaDefecte;
         }
     }

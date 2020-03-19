@@ -178,10 +178,9 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         {
             if (file != null)
             {
-                string numeFisier = file.FileName;
                 List<Defect> defects = _defectService.GetListOfDefectsFromFileCSV(file, PlcModelID);
                 _context.Defects.AddRange(defects);
-                _context.SaveChanges();
+                await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["PlcModelID"] = new SelectList(_context.Plcs, "PlcModelID", "Name", PlcModelID);
