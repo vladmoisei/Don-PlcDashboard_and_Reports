@@ -146,9 +146,19 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Function Limit Max TimeSpan, don't pass maximum range
         public TimeSpan LimitMaxTimeSpan(DateTime timpStart, DateTime timpStop)
         {
-            if ((timpStop - timpStart) >= TimeSpan.MaxValue)
-                return TimeSpan.MaxValue;
-            return timpStop - timpStart;
+            TimeSpan diferenceDataStartAndStop = timpStop - timpStart;
+            TimeSpan maxValueTimeSpan = new TimeSpan(23, 59, 00);
+            try
+            {
+                if (diferenceDataStartAndStop.CompareTo(maxValueTimeSpan) >= 0)
+                    return maxValueTimeSpan;
+                return timpStop - timpStart;
+            }
+            catch (OverflowException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message));
+                return maxValueTimeSpan;
+            }
         }
         // Update last not finished Defect from given Plc to finished defect
         public void UpdateLastNotFinishedDefect(RaportareDbContext context, Defect defect)

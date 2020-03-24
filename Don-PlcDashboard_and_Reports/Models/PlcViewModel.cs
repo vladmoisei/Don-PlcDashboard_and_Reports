@@ -147,9 +147,17 @@ namespace Don_PlcDashboard_and_Reports.Models
         // Function Limit Max TimeSpan, don't pass maximum range
         public TimeSpan LimitMaxTimeSpan(DateTime timpStart, DateTime timpStop)
         {
-            if ((timpStop - timpStart) >= TimeSpan.MaxValue)
+            try
+            {
+                if ((timpStop - timpStart) >= TimeSpan.MaxValue)
+                    return TimeSpan.MaxValue;
+                return timpStop - timpStart;
+            }
+            catch (OverflowException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message));
                 return TimeSpan.MaxValue;
-            return timpStop - timpStart;
+            }
         }
         public string GetNumePlcAfisat(Defect defect)
         {
