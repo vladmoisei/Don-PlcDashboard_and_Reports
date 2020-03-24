@@ -56,7 +56,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         public bool IsReportTime(DateTime time)
         {
             // IF report set time is < than current time make report and report set time plus 3 seconds is >= curent time stop make report (this way I make a window of 3 seconds to mke reports)
-            if (TimeSpan.Compare(time.TimeOfDay, DateTime.Now.TimeOfDay) <= 0 && TimeSpan.Compare(time.AddSeconds(3).TimeOfDay, DateTime.Now.TimeOfDay) >= 0)
+            if (TimeSpan.Compare(time.TimeOfDay, DateTime.Now.TimeOfDay) <= 0 && TimeSpan.Compare(time.AddSeconds(4).TimeOfDay, DateTime.Now.TimeOfDay) >= 0)
                 return true;
 
             return false;

@@ -62,7 +62,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     catch (OverflowException ex)
                     {
                         Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, lastDefect.PlcModel.Name));
-                        lastDefect.IntervalStationare = TimeSpan.MaxValue;
+                        lastDefect.IntervalStationare = new TimeSpan(23, 59, 00);
                     }
 
                     context.Update(lastDefect); // Update DbContext with motiv stationare
@@ -148,17 +148,9 @@ namespace Don_PlcDashboard_and_Reports.Services
         {
             TimeSpan diferenceDataStartAndStop = timpStop - timpStart;
             TimeSpan maxValueTimeSpan = new TimeSpan(23, 59, 00);
-            try
-            {
-                if (diferenceDataStartAndStop.CompareTo(maxValueTimeSpan) >= 0)
-                    return maxValueTimeSpan;
-                return timpStop - timpStart;
-            }
-            catch (OverflowException ex)
-            {
-                Console.WriteLine(String.Format("{0} <=> {1}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message));
+            if (diferenceDataStartAndStop.CompareTo(maxValueTimeSpan) >= 0)
                 return maxValueTimeSpan;
-            }
+            return timpStop - timpStart;
         }
         // Update last not finished Defect from given Plc to finished defect
         public void UpdateLastNotFinishedDefect(RaportareDbContext context, Defect defect)
@@ -173,7 +165,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
             catch (OverflowException ex)
             {
-                defect.IntervalStationare = TimeSpan.MaxValue;
+                defect.IntervalStationare = new TimeSpan(23, 59, 00);
                 Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, defect.PlcModel.Name));
             }
 
@@ -272,6 +264,16 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
 
             return listaDefecte;
+        }
+
+        // Return list of defects between given dates
+        public List<Defect> GetListOfDefectsBetweenDates(IEnumerable<Defect> listaDefecte, DateTime dataFrom, DateTime dataTo)
+        {
+            // Collect Data between given dates
+            IEnumerable<Defect> listaSql = listaDefecte.Where(model => model.TimpStartDefect.CompareTo(dataFrom) >= 0 && model.TimpStartDefect.CompareTo(dataTo) <= 0);
+
+            // Sort data by TimpStartDefect
+            return listaSql.OrderBy(item => item.TimpStartDefect).ToList();
         }
     }
 }

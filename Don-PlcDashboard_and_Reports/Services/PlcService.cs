@@ -123,7 +123,8 @@ namespace Don_PlcDashboard_and_Reports.Services
                 plcModel.TagsList = tagList.Where(t => t.PlcModelID == plcModel.PlcModelID).ToList();
                 plcModel.PingRequestsFail = 0; // Initiate with 0 ping requests fail
                 ListPlcs.Add(plcModel);
-                ListPlcViewModels.Add(new PlcViewModel { PlcModel = plcModel} );
+                if (plcModel.IsEnable)
+                    ListPlcViewModels.Add(new PlcViewModel { PlcModel = plcModel} );
             }
         }
 

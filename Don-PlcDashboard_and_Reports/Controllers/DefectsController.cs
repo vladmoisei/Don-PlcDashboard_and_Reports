@@ -16,18 +16,33 @@ namespace Don_PlcDashboard_and_Reports.Controllers
     {
         private readonly RaportareDbContext _context;
         private readonly DefectService _defectService;
+        private readonly PlcService _plcService;
 
-        public DefectsController(RaportareDbContext context, DefectService defectService)
+        public DefectsController(RaportareDbContext context, DefectService defectService, PlcService plcService)
         {
             _context = context;
             _defectService = defectService;
+            _plcService = plcService;
         }
 
         // GET: Defects
         public async Task<IActionResult> Index()
         {
             var raportareDbContext = _context.Defects.Include(d => d.PlcModel);
+            ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "Name", "Name");
             return View(await raportareDbContext.ToListAsync());
+        }
+
+        // POST: Defects
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Index(DateTime dataFrom, DateTime dataTo, string utilaj, string btnAfiseaza, string btnExtrageExcel)
+        {
+            var raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
+            ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "Name", "Name");
+            ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
+            ViewBag.dataTo = dataTo.ToString("yyyy-MM-dd");
+            return View(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo));
         }
 
         // GET: Defects/Details/5
