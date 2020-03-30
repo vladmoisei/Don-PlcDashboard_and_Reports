@@ -28,8 +28,8 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         // GET: Defects
         public async Task<IActionResult> Index()
         {
-            DateTime dataFrom = DateTime.Now;
-            DateTime dataTo = DateTime.Now.AddDays(1);
+            DateTime dataFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00);
+            DateTime dataTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(1).Day, 00, 00, 00);
             var raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
             ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "PlcModelID", "Name");
             ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
@@ -42,10 +42,13 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Index(int PlcModelID, DateTime dataFrom, DateTime dataTo, string utilaj, string btnAfiseaza, string btnExtrageExcel)
         {
-            var raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
             ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "PlcModelID", "Name", PlcModelID);
             ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
             ViewBag.dataTo = dataTo.ToString("yyyy-MM-dd");
+            List<Defect> raportareDbContext;
+            if (PlcModelID == 0 || PlcModelID == 7) 
+                raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
+            else raportareDbContext = await _context.Defects.Include(d => d.PlcModel).Where(item => item.PlcModelID == PlcModelID).ToListAsync();
             return View(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo));
         }
 
