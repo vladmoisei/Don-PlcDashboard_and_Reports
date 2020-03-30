@@ -215,8 +215,8 @@ namespace Don_PlcDashboard_and_Reports.Services
                 foreach (var elem in listaDeAfisat)
                 {
                     ws.Cells[string.Format("A{0}", rowStart)].Value = elem.PlcModel.Name;
-                    ws.Cells[string.Format("B{0}", rowStart)].Value = elem.TimpStartDefect.ToString("dd.MM.yyyy hh:mm:ss");
-                    ws.Cells[string.Format("C{0}", rowStart)].Value = elem.TimpStopDefect.ToString("dd.MM.yyyy hh:mm:ss");
+                    ws.Cells[string.Format("B{0}", rowStart)].Value = elem.TimpStartDefect.ToString("dd.MM.yyyy HH:mm");
+                    ws.Cells[string.Format("C{0}", rowStart)].Value = elem.TimpStopDefect.ToString("dd.MM.yyyy HH:mm");
                     ws.Cells[string.Format("D{0}", rowStart)].Value = elem.MotivStationare;
                     ws.Cells[string.Format("E{0}", rowStart)].Value = elem.IntervalStationare.ToString("hh\\:mm\\:ss");
                     rowStart++;
