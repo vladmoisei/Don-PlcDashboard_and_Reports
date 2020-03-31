@@ -1,5 +1,6 @@
 ﻿using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
+using Microsoft.AspNetCore.Mvc;
 using OfficeOpenXml;
 using System;
 using System.Collections.Generic;
@@ -168,7 +169,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             //}
             return queryPlcModelNames;
         }
-        // Functie creare fisier excel cu consumul lunar
+        // Functie creare fisier excel cu defecte pentru ziua precedenta
         // Functie exportare data to excel file and save to disk
         // returneaza FilePath
         public string SaveExcelFileToDisk(DateTime dataFrom, DateTime dataTo, RaportareDbContext _context)
@@ -180,24 +181,6 @@ namespace Don_PlcDashboard_and_Reports.Services
 
             // Sort data by TimpStartDefect
             var listaExcel = listaSql.OrderBy(item => item.TimpStartDefect);
-
-            // Create list to for excel file from data grouped by plc and sorted by TimpStartdefect
-            foreach (var nameGroup in GroupBySingleProperty(listaExcel))
-            {
-                Console.WriteLine($"Key: {nameGroup.Key}");
-                foreach (var defect in nameGroup)
-                {
-                    Console.WriteLine($"\t{defect.PlcModel.Name}");
-                    listaDeAfisat.Add(new Defect
-                    {
-                        PlcModel = defect.PlcModel,
-                        TimpStartDefect = defect.TimpStartDefect,
-                        TimpStopDefect = defect.TimpStopDefect,
-                        MotivStationare = defect.MotivStationare,
-                        IntervalStationare = defect.IntervalStationare
-                    });
-                }
-            }
 
             // Create Excel file
             using (var pck = new ExcelPackage())

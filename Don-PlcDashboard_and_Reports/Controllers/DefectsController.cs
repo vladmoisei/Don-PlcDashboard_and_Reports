@@ -9,6 +9,8 @@ using Don_PlcDashboard_and_Reports.Data;
 using Don_PlcDashboard_and_Reports.Models;
 using Microsoft.AspNetCore.Http;
 using Don_PlcDashboard_and_Reports.Services;
+using OfficeOpenXml;
+using System.IO;
 
 namespace Don_PlcDashboard_and_Reports.Controllers
 {
@@ -17,23 +19,26 @@ namespace Don_PlcDashboard_and_Reports.Controllers
         private readonly RaportareDbContext _context;
         private readonly DefectService _defectService;
         private readonly PlcService _plcService;
+        private readonly ReportService _reportService;
 
-        public DefectsController(RaportareDbContext context, DefectService defectService, PlcService plcService)
+        public DefectsController(RaportareDbContext context, DefectService defectService, PlcService plcService, ReportService reportService)
         {
             _context = context;
             _defectService = defectService;
             _plcService = plcService;
+            _reportService = reportService;
         }
 
         // GET: Defects
         public async Task<IActionResult> Index()
         {
             DateTime dataFrom = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00);
-            DateTime dataTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.AddDays(1).Day, 00, 00, 00);
+            DateTime dataTo = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 00, 00, 00);
+            dataTo = dataTo.AddDays(1);
             var raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
             ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "PlcModelID", "Name");
             ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
-            ViewBag.dataTo = dataTo.AddDays(1).ToString("yyyy-MM-dd");
+            ViewBag.dataTo = dataTo.ToString("yyyy-MM-dd");
             return View(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo));
         }
 
@@ -45,11 +50,51 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "PlcModelID", "Name", PlcModelID);
             ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
             ViewBag.dataTo = dataTo.ToString("yyyy-MM-dd");
-            List<Defect> raportareDbContext;
-            if (PlcModelID == 0 || PlcModelID == 7) 
-                raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
-            else raportareDbContext = await _context.Defects.Include(d => d.PlcModel).Where(item => item.PlcModelID == PlcModelID).ToListAsync();
-            return View(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo));
+            // Get List Of defects By PlcModelID
+            List<Defect> raportareDbContext = await _defectService.GetListOfDefectsByPlcModelIdAsync(_context, PlcModelID);
+            // Show data between dates and selected by Plc
+            var listaDeAfisat = _defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo);
+            if (String.IsNullOrEmpty(btnExtrageExcel))
+                return View(listaDeAfisat);
+            return ExportToExcelListOfDefects(listaDeAfisat);
+
+        }
+
+        // Functie exportare data to excel file
+        public IActionResult ExportToExcelListOfDefects(List<Defect> listaDeAfisat)
+        {
+            var stream = new MemoryStream();
+
+            using (var pck = new ExcelPackage(stream))
+            {
+                ExcelWorksheet ws = pck.Workbook.Worksheets.Add("Lista defecte");
+                ws.Cells["A1:Z1"].Style.Font.Bold = true;
+
+                ws.Cells["A1"].Value = "Denumire utilaj";
+                ws.Cells["B1"].Value = "Timp Start Defect";
+                ws.Cells["C1"].Value = "Timp Stop Defect";
+                ws.Cells["D1"].Value = "Motiv Stationare";
+                ws.Cells["E1"].Value = "Interval Stationare";
+
+                int rowStart = 2;
+                foreach (var elem in listaDeAfisat)
+                {
+                    ws.Cells[string.Format("A{0}", rowStart)].Value = elem.PlcModel.Name;
+                    ws.Cells[string.Format("B{0}", rowStart)].Value = elem.TimpStartDefect.ToString("dd.MM.yyyy HH:mm");
+                    ws.Cells[string.Format("C{0}", rowStart)].Value = elem.TimpStopDefect.ToString("dd.MM.yyyy HH:mm");
+                    ws.Cells[string.Format("D{0}", rowStart)].Value = elem.MotivStationare;
+                    ws.Cells[string.Format("E{0}", rowStart)].Value = elem.IntervalStationare.ToString("hh\\:mm\\:ss");
+                    rowStart++;
+                }
+
+                ws.Cells["A:AZ"].AutoFitColumns();
+
+                pck.Save();
+            }
+            stream.Position = 0;
+            string excelName = "RaportGazGaddaF2.xlsx";
+            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", excelName);
+
         }
 
         // GET: Defects/Details/5

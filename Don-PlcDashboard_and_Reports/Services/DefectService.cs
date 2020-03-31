@@ -275,5 +275,16 @@ namespace Don_PlcDashboard_and_Reports.Services
             // Sort data by TimpStartDefect
             return listaSql.OrderBy(item => item.TimpStartDefect).ToList();
         }
+
+        // Function return List of Dfect By PlcModelId from Database
+        public async Task<List<Defect>> GetListOfDefectsByPlcModelIdAsync(RaportareDbContext _context, int PlcModelID)
+        {
+            List<Defect> raportareDbContext;
+            // Show data between dates and selected by Plc
+            if (PlcModelID == 0 || PlcModelID == 7)
+                raportareDbContext = await _context.Defects.Include(d => d.PlcModel).ToListAsync();
+            else raportareDbContext = await _context.Defects.Include(d => d.PlcModel).Where(item => item.PlcModelID == PlcModelID).ToListAsync();
+            return raportareDbContext;
+        }
     }
 }
