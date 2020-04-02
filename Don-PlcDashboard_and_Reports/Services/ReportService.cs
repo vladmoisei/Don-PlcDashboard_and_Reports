@@ -13,7 +13,8 @@ namespace Don_PlcDashboard_and_Reports.Services
 {
     public class ReportService
     {
-        public bool IsReportSent { get; set; }
+        public bool VarIsReportTime { get; set; }
+        public int NumberOfCheckedPlc { get; set; }
         public DateTime TimeOfReport { get; set; }
         public String MailList { get; set; }
         public string MailSubject { get; set; }
@@ -27,22 +28,49 @@ namespace Don_PlcDashboard_and_Reports.Services
         }
 
         // Function make report and send mail if it is time
-        public bool MakeReport(RaportareDbContext context)
+        public bool MakeReport(RaportareDbContext context, PlcService plcService)
         {
-            if (IsReportTime(TimeOfReport))
+            int nrOfAvailablePlc = plcService.ListPlcs.Where(p => p.IsEnable).Count();
+            SetVarIsReportTime(nrOfAvailablePlc); // Set Variable for report tile
+            SetNumberOfCheckedPlc();
+
+            if (NumberOfCheckedPlc == nrOfAvailablePlc)
+                SendReportOnMail(context); // Send Mail with report
+
+            return VarIsReportTime;
+        }
+        // Send report on mail
+        public bool SendReportOnMail(RaportareDbContext context)
+        {
+            if (!string.IsNullOrEmpty(MailList))
             {
-                if (!string.IsNullOrEmpty(MailList))
-                {
-                    TimeOfReport =ChangeDateKeepTime(TimeOfReport); // Add curent Date to Time Of report Variable, used to Save excel file for the previous day
-                    MailSubject = "Raport stationari utilaje ajustaj";
-                    MailBodyText = string.Format("Buna dimineata. <br>Atasat gasiti raport stationari utilaje ajustaj <br>O zi buna.");
-                    MailFilePath = SaveExcelFileToDisk(TimeOfReport.AddDays(-1), TimeOfReport, context);
-                    SendMail(MailList, MailFilePath, MailSubject, MailBodyText);
-                    return true;
-                }
+                TimeOfReport = ChangeDateKeepTime(TimeOfReport); // Add curent Date to Time Of report Variable, used to Save excel file for the previous day
+                MailSubject = "Raport stationari utilaje ajustaj";
+                MailBodyText = string.Format("Buna dimineata. <br>Atasat gasiti raport stationari utilaje ajustaj <br>O zi buna.");
+                MailFilePath = SaveExcelFileToDisk(TimeOfReport.AddDays(-1), TimeOfReport, context);
+                SendMail(MailList, MailFilePath, MailSubject, MailBodyText);
+                return true;
             }
             return false;
         }
+        // Logic Finish Defects at report time for report
+        public void SetVarIsReportTime(int nrOfAvailablePlc)
+        {
+            if (IsReportTime(TimeOfReport))
+                VarIsReportTime = true;
+            if (NumberOfCheckedPlc >= nrOfAvailablePlc)
+                VarIsReportTime = false;
+        }
+
+        // Increment Number of Plc Checked and reset to 0 when finished
+        public void SetNumberOfCheckedPlc()
+        {
+            if (VarIsReportTime) NumberOfCheckedPlc++;
+            else NumberOfCheckedPlc = 0;
+        }
+
+
+        // For Report time 
         public DateTime ChangeDateKeepTime(DateTime time)
         {
             return new DateTime(
@@ -56,7 +84,7 @@ namespace Don_PlcDashboard_and_Reports.Services
         // Function Check if TimeNow is biggger than the report set time
         public bool IsReportTime(DateTime time)
         {
-            // IF report set time is < than current time make report and report set time plus 3 seconds is >= curent time stop make report (this way I make a window of 3 seconds to mke reports)
+            // IF report set time is < than current time make report and report set time plus 3 seconds is >= curent time stop make report (this way I make a window of 3 seconds to make reports)
             if (TimeSpan.Compare(time.TimeOfDay, DateTime.Now.TimeOfDay) <= 0 && TimeSpan.Compare(time.AddSeconds(4).TimeOfDay, DateTime.Now.TimeOfDay) >= 0)
                 return true;
 

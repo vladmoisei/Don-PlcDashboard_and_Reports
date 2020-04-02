@@ -28,7 +28,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             if (lastDefect != null && lastDefect.DefectFinalizat == false)
             { //if list is not empty and last defect is not finalised
                 // make report if it is time TODO
-                if (reportService.MakeReport(context)) // make report to excel
+                if (reportService.MakeReport(context, plcService)) // make report to excel
                     UpdateLastNotFinishedDefect(context, lastDefect); // finished not finalised defect
             }
             // Add PlcViewModel
