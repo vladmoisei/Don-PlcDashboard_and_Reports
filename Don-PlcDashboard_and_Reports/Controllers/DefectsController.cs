@@ -39,7 +39,7 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             ViewBag.Utilaje = new SelectList(_plcService.ListPlcs, "PlcModelID", "Name");
             ViewBag.dataFrom = dataFrom.ToString("yyyy-MM-dd");
             ViewBag.dataTo = dataTo.ToString("yyyy-MM-dd");
-            return View(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo));
+            return View(_reportService.GetListGroupBySingleProperty(_defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo)));
         }
 
         // POST: Defects
@@ -55,8 +55,8 @@ namespace Don_PlcDashboard_and_Reports.Controllers
             // Show data between dates and selected by Plc
             var listaDeAfisat = _defectService.GetListOfDefectsBetweenDates(raportareDbContext, dataFrom, dataTo);
             if (String.IsNullOrEmpty(btnExtrageExcel))
-                return View(listaDeAfisat);
-            return ExportToExcelListOfDefects(listaDeAfisat);
+                return View(_reportService.GetListGroupBySingleProperty(listaDeAfisat));
+            return ExportToExcelListOfDefects(_reportService.GetListGroupBySingleProperty(listaDeAfisat));
 
         }
 

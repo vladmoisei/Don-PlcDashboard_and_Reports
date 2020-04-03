@@ -175,7 +175,8 @@ namespace Don_PlcDashboard_and_Reports.Services
         }
 
         // Query function Group By Single Property of object
-        public IOrderedEnumerable<IGrouping<string, Defect>> GroupBySingleProperty(IEnumerable<Defect> listOfDefects)
+        // Return List grouped by plc name
+        public List<Defect> GetListGroupBySingleProperty(IEnumerable<Defect> listOfDefects)
         {
             Console.WriteLine("Group by a single property in an object:");
 
@@ -187,15 +188,18 @@ namespace Don_PlcDashboard_and_Reports.Services
                 orderby newGroup.Key
                 select newGroup;
 
-            //foreach (var nameGroup in queryPlcModelNames)
-            //{
-            //    Console.WriteLine($"Key: {nameGroup.Key}");
-            //    foreach (var defect in nameGroup)
-            //    {
-            //        Console.WriteLine($"\t{defect.PlcModel.Name}");
-            //    }
-            //}
-            return queryPlcModelNames;
+            var listaGrupata = new List<Defect>();/*listaSql.OrderBy(item => item.TimpStartDefect);*/
+            // Get List by grouped by PLC name
+            foreach (var nameGroup in queryPlcModelNames)
+            {
+                Console.WriteLine($"Key: {nameGroup.Key}");
+                foreach (var defect in nameGroup)
+                {
+                    Console.WriteLine($"\t{defect.PlcModel.Name}");
+                    listaGrupata.Add(defect);
+                }
+            }
+            return listaGrupata;
         }
         // Functie creare fisier excel cu defecte pentru ziua precedenta
         // Functie exportare data to excel file and save to disk
@@ -207,8 +211,8 @@ namespace Don_PlcDashboard_and_Reports.Services
             // Collect Data between given dates
             IEnumerable<Defect> listaSql = _context.Defects.Where(model => model.TimpStartDefect.CompareTo(dataFrom) >= 0 && model.TimpStartDefect.CompareTo(dataTo) <= 0);
 
-            // Sort data by TimpStartDefect
-            var listaExcel = listaSql.OrderBy(item => item.TimpStartDefect);
+            // Get List grouped by PLC name
+            var listaExcel = GetListGroupBySingleProperty(listaSql);
 
             // Create Excel file
             using (var pck = new ExcelPackage())
@@ -223,7 +227,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 ws.Cells["E1"].Value = "Interval Stationare";
 
                 int rowStart = 2;
-                foreach (var elem in listaDeAfisat)
+                foreach (var elem in listaExcel)
                 {
                     ws.Cells[string.Format("A{0}", rowStart)].Value = elem.PlcModel.Name;
                     ws.Cells[string.Format("B{0}", rowStart)].Value = elem.TimpStartDefect.ToString("dd.MM.yyyy HH:mm");
