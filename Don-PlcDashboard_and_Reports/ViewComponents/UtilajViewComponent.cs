@@ -38,6 +38,7 @@ namespace Don_PlcDashboard_and_Reports.ViewComponents
             ViewData["Nume"] = numePlc;
             ViewData["chartId"] = "chartId"+numePlc;
             ViewData["chartData"] = JsonConvert.SerializeObject(plcViewModel.ChartDefectsInPercent); // Serialize ChartData to pass it in JS variable
+            ViewData["btnShowChart"] = "btn" + numePlc;
             return View("Default", plcViewModel); // Pass Plc View model to view
         }
     }

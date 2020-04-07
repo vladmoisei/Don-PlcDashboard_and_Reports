@@ -28,9 +28,9 @@ namespace Don_PlcDashboard_and_Reports
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // @"Server=172.16.4.165\SQLEXPRESS;Database=ConsumGazDatabase;
+            // @"Server=172.16.4.165\SQLEXPRESS;
             services.AddDbContext<RaportareDbContext>(options =>
-            options.UseSqlServer(@"Server=172.16.4.165\SQLEXPRESS;Database=Don_DashboardReports;User Id=user; Password=Calarasi81; MultipleActiveResultSets=true;"));
+            options.UseSqlServer(@"Server=.\SQLEXPRESS;Database=Don_DashboardReports;User Id=user; Password=Calarasi81; MultipleActiveResultSets=true;"));
 
 
             services.AddRazorPages(); // Added for Razor Pages

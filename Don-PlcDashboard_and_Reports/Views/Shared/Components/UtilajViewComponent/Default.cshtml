@@ -2,56 +2,70 @@
 @{
     ViewData["Title"] = "ViewComponentUtilaj";
 }
-    <div class=@(Model.IsDefectFinalizat ? "" : "plc_text_bg_red")>
-        <h1>@ViewData["Nume"]</h1>
+<div class=@(Model.IsDefectFinalizat ? "" : "plc_text_bg_red")>
+    <h1>@ViewData["Nume"]</h1>
 
-        <h2 class=@(Model.IsDefectFinalizat ? "plc_text_bg_green" : "")>
-            @Model.TextAfisare
-        </h2>
-        <h3>@Model.RandamentRealizat</h3>
-    </div>
-    <div class="">
-        <canvas id="@ViewData["chartId"]"></canvas>
-    </div>
+    <h2 class=@(Model.IsDefectFinalizat ? "plc_text_bg_green" : "")>
+        @Model.TextAfisare
+    </h2>
+    <h3>@Model.RandamentRealizat</h3>
+</div>
+<div class="inaltime_zero">
+    <canvas id="@ViewData["chartId"]"></canvas>
+</div>
 
-    <div>Stare conexiune: @Model.IsConnected</div>
+<div>
+    Stare conexiune: @Model.IsConnected
+    <button id="@ViewData["btnShowChart"]">Show chart</button>
+</div>
 
 <script>
-    var ctx = document.getElementById('@ViewData["chartId"]').getContext('2d');
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Defect mecanic', 'Defect electric', 'Oprire programata', 'Oprire tehnologica', 'Lipsa pod rulant / Lipsa material', 'Nu s-a apasat cauza'],
-            datasets: [{
-                label: '% of Defects',
-                data: @ViewData["chartData"],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
+    // Get Elem Show Chart Button
+    var elemBtnChart = document.getElementById('@ViewData["btnShowChart"]');
+    // Add event listener to Show Chart Button to show Chart
+    elemBtnChart.addEventListener("click", function () {
+        // Remove inaltime_zero class to show chart
+        var charElemParent = document.getElementById('@ViewData["chartId"]').parentElement;
+        charElemParent.classList.toggle("inaltime_zero");
+
+        // Add Chart do div
+        var ctx = document.getElementById('@ViewData["chartId"]').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Defect mecanic', 'Defect electric', 'Oprire programata', 'Oprire tehnologica', 'Lipsa pod rulant / Lipsa material', 'Nu s-a apasat cauza'],
+                datasets: [{
+                    label: '% of Defects',
+                    data: @ViewData["chartData"],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
                 }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
             }
-        }
+        });
     });
+
 </script>
