@@ -181,25 +181,34 @@ namespace Don_PlcDashboard_and_Reports.Services
             // Check if plc is not connected and return messege Plc DEconectat
             try
             {
-                if (!plcService.IsAvailableIpAdress(plc)) return "Plc Deconectat";
+                if (!plcService.IsAvailableIpAdress(plc)) 
+                    return "Plc Deconectat";
+                // AddedException for GaddaF2, GaddaF4 and DunkePRess: not Get Motiv Stationare
+                if (plc.Name == "GaddaF2" || plc.Name == "GaddaF4" || plc.Name == "PresaDunke")
+                    return "Stationeaza";
+
+                // If Plc Connected return a type of breakdown messege
+                if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "MechanicalBreakDown").ToList().FirstOrDefault().Value))
+                    return "Defect mecanic";
+                else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "ElectricalBreakDown").ToList().FirstOrDefault().Value))
+                    return "Defect electric";
+                else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "ProgrammedBreakDown").ToList().FirstOrDefault().Value))
+                    return "Oprire programata";
+                else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "TechnologicalBreakDown").ToList().FirstOrDefault().Value))
+                    return "Oprire tehnologica";
+                else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "NoCraneReadyBreakDown").ToList().FirstOrDefault().Value))
+                    return "Lipsa pod rulant / Lipsa material";
             }
             catch (PlcException exPlc)
             {
                 Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Name));
                 return "Plc Deconectat";
             }
-
-            // If Plc Connected return a type of breakdown messege
-            if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "MechanicalBreakDown").ToList().FirstOrDefault().Value))
-                return "Defect mecanic";
-            else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "ElectricalBreakDown").ToList().FirstOrDefault().Value))
-                return "Defect electric";
-            else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "ProgrammedBreakDown").ToList().FirstOrDefault().Value))
-                return "Oprire programata";
-            else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "TechnologicalBreakDown").ToList().FirstOrDefault().Value))
-                return "Oprire tehnologica";
-            else if (Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "NoCraneReadyBreakDown").ToList().FirstOrDefault().Value))
-                return "Lipsa pod rulant / Lipsa material";
+            catch (NullReferenceException ex)
+            {
+                Console.WriteLine(String.Format("{0} <=> {1} <=> PlcaName: {2}. Din GetMotivStationare", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name));
+                return "Nu s-a apasat cauza";
+            }
 
             // If none of the predefined causes are not set return none was pressed
             return "Nu s-a apasat cauza";
