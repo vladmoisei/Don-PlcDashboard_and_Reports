@@ -10,7 +10,7 @@
 <div class="row">
     @foreach (var item in Model)
     {
-        <div class="col-lg-4 plcModelView_border">
+        <div class="col-lg-3 plcModelView_border">
             <div style="width:100%">
                 @await Component.InvokeAsync("UtilajViewComponent", new { numePlc = item.PlcModel.Name })
             </div>

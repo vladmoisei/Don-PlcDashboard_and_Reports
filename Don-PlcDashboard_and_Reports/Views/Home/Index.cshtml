@@ -18,6 +18,10 @@
 @section Scripts {
     @*<script src="~/js/AfisareDate.js">*@
     <script>
+        // Add Class Container Fluid To Index page (to see more PLCs on the same page)
+        var container = document.getElementById("container");
+        container.classList.remove("container");
+        container.classList.add("container-fluid");
         // Creare element lista selectie afisare date
         //let selectieAfisareDateElement = document.getElementById("dashboard");
         function autoRefreshPage() {

@@ -214,9 +214,16 @@ namespace Don_PlcDashboard_and_Reports.Services
             return "Nu s-a apasat cauza";
         }
 
-        // Chek if brakdown is in progress
+        // Chek if brakdown is in progress (check if it is breakdown in progress or is pressed any cause; cannot be pressed any cause without breakdown)
         public bool IsBreakDownInProgress(PlcModel plc)
         {
+            foreach (var tag in plc.TagsList)
+            {
+                if (Convert.ToBoolean(tag.Value))
+                    return Convert.ToBoolean(tag.Value);
+            }
+
+            return false;
             return Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "BreakDownInProgress").ToList().FirstOrDefault().Value);
         }
 
