@@ -1,24 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj": {}
+    "C:\\Users\\User\\Desktop\\Programe cod sursa\\Don-Dashboard_Stationari_Ajustaj\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj": {}
   },
   "projects": {
-    "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj": {
+    "C:\\Users\\User\\Desktop\\Programe cod sursa\\Don-Dashboard_Stationari_Ajustaj\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
+        "projectUniqueName": "C:\\Users\\User\\Desktop\\Programe cod sursa\\Don-Dashboard_Stationari_Ajustaj\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
         "projectName": "Don-PlcDashboard_and_Reports",
-        "projectPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
-        "packagesPath": "C:\\Users\\IA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\IA\\source\\repos\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\obj\\",
+        "projectPath": "C:\\Users\\User\\Desktop\\Programe cod sursa\\Don-Dashboard_Stationari_Ajustaj\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports.csproj",
+        "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\User\\Desktop\\Programe cod sursa\\Don-Dashboard_Stationari_Ajustaj\\Don-PlcDashboard_and_Reports\\Don-PlcDashboard_and_Reports\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\",
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\IA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
@@ -100,7 +100,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
         }
       }
     }

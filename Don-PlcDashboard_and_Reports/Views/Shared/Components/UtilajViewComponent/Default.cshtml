@@ -11,12 +11,12 @@
     <h3>@Model.RandamentRealizat</h3>
 </div>
 <div class="inaltime_zero">
-    <canvas id="@ViewData["chartId"]"></canvas>
+    <canvas id='@ViewData["chartId"]'></canvas>
 </div>
 
 <div>
     Stare conexiune: @Model.IsConnected
-    <button id="@ViewData["btnShowChart"]">Show chart</button>
+    <button id='@ViewData["btnShowChart"]'>Show chart</button>
 </div>
 
 <script>
@@ -36,7 +36,7 @@
                 labels: ['Defect mecanic', 'Defect electric', 'Oprire programata', 'Oprire tehnologica', 'Lipsa pod rulant / Lipsa material', 'Nu s-a apasat cauza'],
                 datasets: [{
                     label: '% of Defects',
-                    data: @ViewData["chartData"],
+                    data: '@ViewData["chartData"]',
                     backgroundColor: [
                         'rgba(255, 99, 132, 0.2)',
                         'rgba(54, 162, 235, 0.2)',

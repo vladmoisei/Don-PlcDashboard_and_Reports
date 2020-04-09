@@ -33,7 +33,7 @@
                 //    numePlc: this.value
                 //},
                 success: function (response) {
-                    console.log(" RAspuns: " + response);
+                    console.log(" RAspuns: success");
                     //console.log("Id: " + response.id);
                     //console.log("Data PReluare: " + response.data);
                     //console.log(checkWithValue(response.id));
@@ -41,13 +41,13 @@
                     //chengeCheckBoxWithData(response.id, response.data);
                 },
                 error: function (response) {
-                    console.log("Raspuns din erorr: " + response);
+                    console.log("Raspuns din erorr: error");
                 }
 
             });
             console.log("Refresh page");
         }
-        setInterval('autoRefreshPage()', 19000); // Resetare la 6 secunde
+        setInterval('autoRefreshPage()', 10000); // Resetare la 6 secunde
 
 
     </script>
