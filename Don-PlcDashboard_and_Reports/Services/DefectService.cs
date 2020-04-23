@@ -181,7 +181,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             // Check if plc is not connected and return messege Plc DEconectat
             try
             {
-                if (!plcService.IsAvailableIpAdress(plc)) 
+                if (!plcService.IsAvailableIpAdress(plc))
                     return "Plc Deconectat";
                 // AddedException for GaddaF2, GaddaF4 and DunkePRess: not Get Motiv Stationare
                 if (plc.Name == "GaddaF2" || plc.Name == "GaddaF4" || plc.Name == "PresaDunke")
@@ -224,7 +224,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
 
             return false;
-            return Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "BreakDownInProgress").ToList().FirstOrDefault().Value);
+            //return Convert.ToBoolean(plc.TagsList.Where(tag => tag.Name == "BreakDownInProgress").ToList().FirstOrDefault().Value);
         }
 
         // Chek if second brakdown is in progress

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Don_PlcDashboard_and_Reports.Services
 {
-    public class PlcService
+    public class PlcService : IDisposable
     {
         public int Valoare { get; set; } = 1;// Valoare de proba comunicatie Blazor
         // List of Plcs
@@ -124,7 +124,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 plcModel.PingRequestsFail = 0; // Initiate with 0 ping requests fail
                 ListPlcs.Add(plcModel);
                 if (plcModel.IsEnable)
-                    ListPlcViewModels.Add(new PlcViewModel { PlcModel = plcModel} );
+                    ListPlcViewModels.Add(new PlcViewModel { PlcModel = plcModel });
             }
         }
 
@@ -331,5 +331,14 @@ namespace Don_PlcDashboard_and_Reports.Services
             return "A fost apasat click din View";
         }
 
+        public void Dispose()
+        {
+            ListPlcs.Clear();
+            // List of Tags
+            ListTags.Clear();
+            // List of PLC Model View 
+            ListPlcViewModels.Clear();
+            //throw new NotImplementedException();
+        }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Don_PlcDashboard_and_Reports.Services
 {
-    public class ReportService
+    public class ReportService : IDisposable
     {
         public bool VarIsReportTime { get; set; }
         public int NumberOfCheckedPlc { get; set; }
@@ -247,6 +247,11 @@ namespace Don_PlcDashboard_and_Reports.Services
                 //pck.Save();
                 return filePath;
             }
+        }
+
+        public void Dispose()
+        {
+            MailList = "";
         }
     }
 }

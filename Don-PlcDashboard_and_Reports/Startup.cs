@@ -37,11 +37,18 @@ namespace Don_PlcDashboard_and_Reports
             services.AddServerSideBlazor(); // Added for Blazor
             services.AddControllersWithViews();
             services.AddScoped<HttpClient>();
-            services.AddSingleton<PlcService>(); // Added Plc service, startd directly because it is not derived
-            services.AddSingleton<TimedService>(); // Background Timd service
-            services.AddSingleton<DefectService>(); // Defect Service
-            services.AddSingleton<ReportService>(); // Report Service
-            services.AddSingleton<StartAutBackgroundService>();
+            //services.AddSingleton<PlcService>(); // Dispose automatically
+            //services.AddSingleton(new PlcService()); // dispose mannualy or when close app
+            // Added Plc service, startd directly and dispose mannualy or when close app
+            services.AddSingleton((container) =>
+            {
+                var logger = container.GetRequiredService<ILogger<PlcService>>();
+                return new PlcService(logger);
+            });
+            services.AddSingleton<TimedService>(); // Background Timde service
+            services.AddSingleton(new DefectService()); // Defect Service Dispose mannualy or end app
+            services.AddSingleton(new ReportService()); // Report Service Dispose mannualy or end app
+            services.AddSingleton<StartAutBackgroundService>(); // Dispose automatically
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
