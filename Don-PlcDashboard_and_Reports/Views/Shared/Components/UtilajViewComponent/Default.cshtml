@@ -6,7 +6,7 @@
     <h1>@ViewData["Nume"]</h1>
 
     <h2 class=@(Model.IsDefectFinalizat ? "plc_text_bg_green" : "")>
-        @Model.TextAfisare
+        @(Model.IsConnected ? Model.TextAfisare : "Plc Deconectat")
     </h2>
     <h3>@Model.RandamentRealizat</h3>
 </div>

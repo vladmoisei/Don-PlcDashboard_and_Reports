@@ -31,7 +31,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             ListTags = new List<TagModel>();
             ListPlcViewModels = new List<PlcViewModel>();
             //_logger = logger;
-            Console.WriteLine("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit PlcService din PlcService Constructor");
+            //Console.WriteLine("{data}<=>{Messege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "A pornit PlcService din PlcService Constructor");
         }
 
         // Get New Plc object by PlcModel
@@ -57,7 +57,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                         catch (PlcException exPlc)
                         {
 
-                            Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
+                            //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
                         }
                         Console.WriteLine("{data}<=>{Messege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a deschis conexiune cu plc", plc.IP);
                     }
@@ -67,15 +67,15 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
             catch (PlcException exPlc)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
             }
             catch (OperationCanceledException ex)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
             }
         }
 
@@ -90,7 +90,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                     if (plc.IsConnected)
                     {
                         plc.Close(); // Inchidere conexiune Plc
-                        Console.WriteLine("{data}<=>{Messege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a inchis conexiune cu plc", plc.IP);
+                        //Console.WriteLine("{data}<=>{Messege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a inchis conexiune cu plc", plc.IP);
                     }
                     else return;
                 }, _cancelTasks.Token);
@@ -98,15 +98,15 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
             catch (PlcException exPlc)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.IP);
             }
             catch (OperationCanceledException ex)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.IP);
             }
         }
 
@@ -169,7 +169,7 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
             catch (PlcException plcEx)
             {
-                Console.WriteLine("{data}<=>{Messege} {error}. PlcName: {PlcName}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Error reading tag value from plc: ", plcEx.Message, tag.PlcModel.Name);
+                //Console.WriteLine("{data}<=>{Messege} {error}. PlcName: {PlcName}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Error reading tag value from plc: ", plcEx.Message, tag.PlcModel.Name);
             }
         }
 
@@ -212,12 +212,12 @@ namespace Don_PlcDashboard_and_Reports.Services
             catch (PlcException exPlc)
             {
 
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Ip);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Ip);
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Ip);
+                //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Ip);
                 return false;
             }
         }
@@ -249,15 +249,15 @@ namespace Don_PlcDashboard_and_Reports.Services
                 }
                 catch (PlcException exPlc)
                 {
-                    Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Name);
+                    //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPlc.Message, plc.Name);
                 }
                 catch (OperationCanceledException ex)
                 {
-                    Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                    //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                    //Console.WriteLine("{data} {exMessege} IP: {ip}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
                 }
             }
         }
@@ -279,13 +279,13 @@ namespace Don_PlcDashboard_and_Reports.Services
             }
             catch (System.Net.NetworkInformation.PingException exPing)
             {
-                Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPing.Message, plc.Name);
+                //Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exPing.Message, plc.Name);
                 plc.PingRequestsFail++;
                 return false;
             }
             catch (Exception ex)
             {
-                Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
+                //Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), ex.Message, plc.Name);
                 plc.PingRequestsFail++;
                 return false;
             }
@@ -303,7 +303,7 @@ namespace Don_PlcDashboard_and_Reports.Services
                 catch (InvalidOperationException exEFUpdate)
                 {
 
-                    Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exEFUpdate.Message, tag.PlcModel.Name);
+                    //Console.WriteLine("{data} {exMessege} PlcName: {name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), exEFUpdate.Message, tag.PlcModel.Name);
                 }
             }
             return Task.CompletedTask;
@@ -321,13 +321,13 @@ namespace Don_PlcDashboard_and_Reports.Services
             {
                 return false;
             }
-            Console.WriteLine("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit PlcModel in ListPlcs with name", plcName);
+            //Console.WriteLine("{data}<=>{Messege} PlcName:{name}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "S-a gasit PlcModel in ListPlcs with name", plcName);
             return true;
         }
 
         public string ClickTestare()
         {
-            Console.WriteLine("{data} {exMessege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Click din View component");
+            //Console.WriteLine("{data} {exMessege}", DateTime.Now.ToString("dd.MM.yyyy hh:mm:ss"), "Click din View component");
             return "A fost apasat click din View";
         }
 

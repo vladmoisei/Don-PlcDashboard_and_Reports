@@ -18,12 +18,10 @@ namespace Don_PlcDashboard_and_Reports
 {
     public class Startup
     {
-        private readonly ILoggerFactory _loggerFactory;
 
-        public Startup(IConfiguration configuration, ILoggerFactory logFactory)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            _loggerFactory = logFactory;
         }
 
         public IConfiguration Configuration { get; }
