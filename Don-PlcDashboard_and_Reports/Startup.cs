@@ -18,9 +18,12 @@ namespace Don_PlcDashboard_and_Reports
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILoggerFactory _loggerFactory;
+
+        public Startup(IConfiguration configuration, ILoggerFactory logFactory)
         {
             Configuration = configuration;
+            _loggerFactory = logFactory;
         }
 
         public IConfiguration Configuration { get; }
@@ -40,11 +43,7 @@ namespace Don_PlcDashboard_and_Reports
             //services.AddSingleton<PlcService>(); // Dispose automatically
             //services.AddSingleton(new PlcService()); // dispose mannualy or when close app
             // Added Plc service, startd directly and dispose mannualy or when close app
-            services.AddSingleton((container) =>
-            {
-                var logger = container.GetRequiredService<ILogger<PlcService>>();
-                return new PlcService(logger);
-            });
+            services.AddSingleton(new PlcService());
             services.AddSingleton<TimedService>(); // Background Timde service
             services.AddSingleton(new DefectService()); // Defect Service Dispose mannualy or end app
             services.AddSingleton(new ReportService()); // Report Service Dispose mannualy or end app
